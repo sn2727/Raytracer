@@ -2,8 +2,8 @@
 #include <core/scalar.h>
 #include <core/float4.h>
  
-
 namespace rt {
+ 
 
 RGBColor::RGBColor(const Float4& f4)
 {
@@ -31,8 +31,11 @@ bool RGBColor::operator != (const RGBColor& b) const {
 }
 
 RGBColor RGBColor::clamp() const {
-    return RGBColor(std::clamp(this -> r, (float)0, (float)1), 
-        std::clamp(this -> g, (float)0, (float)1), std::clamp(this -> b, (float)0, (float)1));
+    float r = std::max((float)0, std::min(this -> r, (float)1));
+    float g = std::max((float)0, std::min(this -> g, (float)1));
+    float b = std::max((float)0, std::min(this -> b, (float)1));
+
+    return RGBColor(r, g, b);
 }
 
 RGBColor RGBColor::gamma(float gam) const {

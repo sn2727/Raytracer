@@ -34,9 +34,8 @@ Vector Vector::operator - () const {
 
 Vector Vector::normalize() const {
     float length = this->length();
-    if (length > 0) {
-        return Vector(this -> x / length, this -> y / length, this -> z / length);
-    }
+    assert(length > 0);
+    return Vector(this -> x / length, this -> y / length, this -> z / length);
 }
 
 Vector operator * (float scalar, const Vector& b) {
