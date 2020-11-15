@@ -1,6 +1,7 @@
 #include <core/color.h>
 #include <core/scalar.h>
 #include <core/float4.h>
+ 
 
 namespace rt {
 
@@ -10,27 +11,28 @@ RGBColor::RGBColor(const Float4& f4)
 }
 
 RGBColor RGBColor::operator + (const RGBColor& c) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(this -> r + c.r, this -> g + c.g, this -> b + c.b);
 }
 
 RGBColor RGBColor::operator - (const RGBColor& c) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(this -> r - c.r, this -> g - c.g, this -> b - c.b);
 }
 
 RGBColor RGBColor::operator * (const RGBColor& c) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(this -> r * c.r, this -> g * c.g, this -> b * c.b);
 }
 
 bool RGBColor::operator == (const RGBColor& c) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return (this -> r == c.r && this -> g == c.g && this -> b == c.b);
 }
 
 bool RGBColor::operator != (const RGBColor& b) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return !(this -> r == b.r && this -> g == b.g && this -> b == b.b);
 }
 
 RGBColor RGBColor::clamp() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(std::clamp(this -> r, (float)0, (float)1), 
+        std::clamp(this -> g, (float)0, (float)1), std::clamp(this -> b, (float)0, (float)1));
 }
 
 RGBColor RGBColor::gamma(float gam) const {
@@ -42,15 +44,15 @@ float RGBColor::luminance() const {
 }
 
 RGBColor operator * (float scalar, const RGBColor& c) {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(c.r * scalar, c.g * scalar, c.b * scalar);
 }
 
 RGBColor operator * (const RGBColor& c, float scalar) {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(c.r * scalar, c.g * scalar, c.b * scalar);
 }
 
 RGBColor operator / (const RGBColor& c, float scalar) {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor(c.r / scalar, c.g / scalar, c.b / scalar);
 }
 
 }
