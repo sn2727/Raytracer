@@ -21,7 +21,11 @@ rt::RGBColor a1computeColor(rt::uint x, rt::uint y, rt::uint width, rt::uint hei
 namespace rt {
 
 void Renderer::test_render1(Image& img) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (uint w = 0; w < img.width(); w++) {
+        for (uint h = 0; h < img.height(); h++){
+            img(w,h) = a1computeColor(w, h, img.width(), img.height());
+        }
+    }
 }
 }
 
@@ -31,6 +35,7 @@ namespace rt {
 
 void Renderer::test_render2(Image& img) {
     /* TODO */ NOT_IMPLEMENTED;
+    
 }
 
 }
