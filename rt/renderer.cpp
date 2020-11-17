@@ -1,5 +1,7 @@
 #include <core/scalar.h>
 #include <core/image.h>
+#include <rt/cameras/orthographic.h>
+#include <rt/cameras/perspective.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
 #include <iostream>
@@ -34,7 +36,20 @@ rt::RGBColor a2computeColor(const rt::Ray& r);
 namespace rt {
 
 void Renderer::test_render2(Image& img) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (uint w = 0; w < img.width(); w++) {
+        for (uint h = 0; h < img.height(); h++){
+
+            // Normalized device coordinates [0, 1]
+            float ndcx = (w + 0.5) / img.width();
+            float ndcy =  (h + 0.5) / img.height();
+
+            // Screen space coordinates [-1, 1]
+            float sscx = ndcx * 2 - 1;
+            float sscy = ndcy * 2 - 1;
+          
+            img(w,h) = a2computeColor(cam -> getPrimaryRay(sscx, sscy));
+        }
+    }
     
 }
 
