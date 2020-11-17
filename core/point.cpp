@@ -8,9 +8,9 @@ namespace rt {
 
 Point::Point(float x, float y, float z)
 {
-    this ->x = x;
-    this ->y = y;
-    this ->z = z;
+    this -> x = x;
+    this -> y = y;
+    this -> z = z;
 }
 
 Point::Point(const Float4& f4)
@@ -19,11 +19,11 @@ Point::Point(const Float4& f4)
 }
 
 Vector Point::operator - (const Point& b) const {
-    return Vector(this ->x - b.x, this ->y - b.y, this ->z - b.z);
+    return Vector(this -> x - b.x, this -> y - b.y, this -> z - b.z);
 }
 
 bool Point::operator == (const Point& b) const {
-    return (this -> x == b.x && this ->y == b.y && this ->z == b.z);
+    return (this -> x == b.x && this -> y == b.y && this -> z == b.z);
 }
 
 bool Point::operator != (const Point& b) const {
