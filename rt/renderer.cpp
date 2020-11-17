@@ -40,13 +40,13 @@ void Renderer::test_render2(Image& img) {
         for (uint h = 0; h < img.height(); h++){
 
             // Normalized device coordinates [0, 1]
-            float ndcx = (w + 0.5) / img.width();
-            float ndcy =  (h + 0.5) / img.height();
+            float ndcx = (w + 0.5f) / img.width();
+            float ndcy = (h + 0.5f) / img.height();
 
             // Screen space coordinates [-1, 1]
             float sscx = ndcx * 2 - 1;
             float sscy = ndcy * 2 - 1;
-          
+    
             img(w,h) = a2computeColor(cam -> getPrimaryRay(sscx, sscy));
         }
     }
