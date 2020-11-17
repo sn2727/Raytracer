@@ -17,7 +17,7 @@ Ray OrthographicCamera::getPrimaryRay(float x, float y) const {
     
     Vector uVec = cross(forward, up).normalize();
     Vector vVec = cross(forward, uVec).normalize();
-    Point origin = center + (scaleX * 0.5f * x * uVec) + (scaleY * 0.5f * y * vVec);
+    Point origin = center + (scaleX * x * uVec) + (scaleY * y * vVec);
     return Ray(origin, forward);
 }
 
