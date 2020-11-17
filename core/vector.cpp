@@ -33,7 +33,7 @@ Vector Vector::operator - () const {
 }
 
 Vector Vector::normalize() const {
-    float length = this->length();
+    float length = sqrt(pow(this->x,2) + pow(this->y, 2) + pow(this->z,2));
     assert(length > 0);
     return Vector(this -> x / length, this -> y / length, this -> z / length);
 }
@@ -59,11 +59,11 @@ float dot(const Vector& a, const Vector& b) {
 }
 
 float Vector::lensqr() const {
-    return this -> x * this -> x + this -> y * this -> y + this -> z * this -> z;
+    return (pow(this->x,2) + pow(this->y, 2) + pow(this->z, 2));
 }
 
 float Vector::length() const {
-    return sqrt(this -> x * this -> x + this -> y * this -> y + this -> z * this -> z);
+    return sqrt(pow(this->x,2) + pow(this->y, 2) + pow(this->z,2));
 }
 
 bool Vector::operator == (const Vector& b) const {
