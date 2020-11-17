@@ -23,11 +23,13 @@ Vector Point::operator - (const Point& b) const {
 }
 
 bool Point::operator == (const Point& b) const {
-    return (this -> x == b.x && this -> y == b.y && this -> z == b.z);
+    return (fabs(this->x - b.x) <= epsilon && fabs(this->y - b.y) <= epsilon 
+            && fabs(this->z - b.z)<=epsilon);
 }
 
 bool Point::operator != (const Point& b) const {
-    return !(this -> x == b.x && this -> y == b.y && this -> z == b.z);
+    return !(fabs(this->x - b.x) <= epsilon && fabs(this->y - b.y) <= epsilon 
+            && fabs(this->z - b.z)<=epsilon);
 }
 
 Point operator * (float scalar, const Point& b) {

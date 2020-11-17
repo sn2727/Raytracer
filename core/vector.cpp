@@ -67,11 +67,13 @@ float Vector::length() const {
 }
 
 bool Vector::operator == (const Vector& b) const {
-    return (this -> x == b.x && this -> y == b.y && this -> z == b.z);
+    return (fabs(this->x - b.x) <= epsilon && fabs(this->y - b.y) <= epsilon 
+            && fabs(this->z - b.z)<=epsilon);
 }
 
 bool Vector::operator != (const Vector& b) const {
-    return !(this -> x == b.x && this -> y == b.y && this -> z == b.z);
+    return !(fabs(this->x - b.x) <= epsilon && fabs(this->y - b.y) <= epsilon 
+            && fabs(this->z - b.z)<=epsilon);
 }
 
 Vector min(const Vector& a, const Vector& b) {
