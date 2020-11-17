@@ -17,6 +17,12 @@ public:
         float horizonalOpeningAngle
         );
 
+    Point center;
+    Vector forward;
+    Vector up;
+    float verticalOpeningAngle;
+    float horizontalOpeningAngle;
+
     virtual Ray getPrimaryRay(float x, float y) const;
 };
 
