@@ -23,11 +23,13 @@ RGBColor RGBColor::operator * (const RGBColor& c) const {
 }
 
 bool RGBColor::operator == (const RGBColor& c) const {
-    return (this -> r == c.r && this -> g == c.g && this -> b == c.b);
+    return (fabs(this -> r - c.r) <= epsilon && fabs(this -> g - c.g) <= epsilon 
+            && fabs(this -> b - c.b) <= epsilon);
 }
 
 bool RGBColor::operator != (const RGBColor& b) const {
-    return !(this -> r == b.r && this -> g == b.g && this -> b == b.b);
+    return !(fabs(this -> r - b.r) <= epsilon && fabs(this -> g - b.g) <= epsilon 
+            && fabs(this -> b - b.b) <= epsilon);
 }
 
 RGBColor RGBColor::clamp() const {
