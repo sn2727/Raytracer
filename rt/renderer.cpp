@@ -45,7 +45,7 @@ void Renderer::test_render2(Image& img) {
 
             // Screen space coordinates [-1, 1]
             float sscx = ndcx * 2 - 1;
-            float sscy = ndcy * 2 - 1;
+            float sscy = -1*(ndcy * 2 - 1);
     
             img(w,h) = a2computeColor(cam -> getPrimaryRay(sscx, sscy));
         }

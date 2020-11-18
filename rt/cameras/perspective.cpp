@@ -15,7 +15,7 @@ PerspectiveCamera::PerspectiveCamera(const Point& center, const Vector& forward,
 Ray PerspectiveCamera::getPrimaryRay(float x, float y) const {
     float d = 1 / tan(verticalOpeningAngle/2);
     Vector sx = (tan(horizontalOpeningAngle/2) * cross(forward, up)).normalize();
-    Vector sy = (tan(verticalOpeningAngle/2) * cross(forward, sx)).normalize();
+    Vector sy = -1*((tan(verticalOpeningAngle/2) * cross(forward, sx)).normalize());
     Vector direction = (d*forward + sx * x + y * sy).normalize();
     return Ray(center, direction);
 }
