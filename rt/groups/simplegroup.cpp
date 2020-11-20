@@ -7,7 +7,15 @@ BBox SimpleGroup::getBounds() const {
 }
 
 Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Intersection bestIntsec = Intersection::failure();
+    for (Primitive* primitive : this -> primitives) {
+        Intersection intsec = primitive->intersect(ray, previousBestDistance);
+        if (intsec.distance < bestIntsec.distance) {
+            bestIntsec = intsec;
+        }
+    }
+
+    return bestIntsec;
 }
 
 void SimpleGroup::rebuildIndex() {
@@ -15,7 +23,7 @@ void SimpleGroup::rebuildIndex() {
 }
 
 void SimpleGroup::add(Primitive* p) {
-    /* TODO */ NOT_IMPLEMENTED;
+    this->primitives.push_back(p);
 }
 
 void SimpleGroup::setMaterial(Material* m) {
