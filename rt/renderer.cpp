@@ -4,6 +4,9 @@
 #include <rt/cameras/perspective.h>
 #include <rt/renderer.h>
 #include <rt/ray.h>
+#include <rt/integrators/integrator.h>
+#include <rt/integrators/casting.h>
+#include <rt/integrators/castingdist.h>
 #include <iostream>
 
 namespace rt {
@@ -13,7 +16,20 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 {}
 
 void Renderer::render(Image& img) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (uint w = 0; w < img.width(); w++) {
+        for (uint h = 0; h < img.height(); h++){
+
+            // Normalized device coordinates [0, 1]
+            float ndcx = (w + 0.5f) / img.width();
+            float ndcy = (h + 0.5f) / img.height();
+
+            // Screen space coordinates [-1, 1]
+            float sscx = ndcx * 2 - 1;
+            float sscy = -1*(ndcy * 2 - 1);
+    
+            img(w,h) = integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
+        }
+    }
 }
 
 }

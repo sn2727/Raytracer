@@ -1,3 +1,5 @@
+#include <rt/intersection.h>
+
 void a_julia();
 void a_cameras();
 void a_solids();
@@ -13,7 +15,6 @@ void a_smooth();
 void a_bumpmappers();
 
 int main(int argc, char* argv[]) {
-    a_julia();
-    a_cameras();
+    a_solids();
     return 0;
 }
