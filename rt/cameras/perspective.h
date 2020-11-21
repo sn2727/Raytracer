@@ -20,8 +20,11 @@ public:
     Point center;
     Vector forward;
     Vector up;
+    Vector sx;
+    Vector sy;
     float verticalOpeningAngle;
     float horizontalOpeningAngle;
+    float d;
 
     virtual Ray getPrimaryRay(float x, float y) const;
 };

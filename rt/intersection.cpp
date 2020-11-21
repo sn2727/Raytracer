@@ -20,6 +20,7 @@ Intersection::operator bool() {
 Intersection Intersection::failure() {
     Intersection intersec = Intersection();
     intersec.intersects = false;
+    intersec.distance = FLT_MAX;
     return intersec;
 }
 

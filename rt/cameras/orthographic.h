@@ -19,6 +19,8 @@ public:
     Point center;
     Vector forward;
     Vector up;
+    Vector uVec;
+    Vector vVec;
     float scaleX;
     float scaleY;
 
