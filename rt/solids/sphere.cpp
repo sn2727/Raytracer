@@ -32,7 +32,7 @@ Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const
     } 
  
     float t = t0; 
-    if (t<previousBestDistance) {
+    if (t >= previousBestDistance) {
         return Intersection::failure();
     }
     Point hitPoint = ray.getPoint(t);
