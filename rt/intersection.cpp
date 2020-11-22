@@ -25,7 +25,7 @@ Intersection Intersection::failure() {
 }
 
 Point Intersection::hitPoint() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return ray.getPoint(distance);
 }
 
 Vector Intersection::normal() const {
