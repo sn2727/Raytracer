@@ -20,7 +20,8 @@ public:
     Point v3;
     float area;
     Vector normal;
-    float d;
+    Vector edge1;
+    Vector edge2;
 };
 
 }
