@@ -20,6 +20,7 @@ BBox Disc::getBounds() const {
 Intersection Disc::intersect(const Ray& ray, float previousBestDistance) const {
     Intersection intersec = plane.intersect(ray);
     if (intersec) {
+        if (intersec.distance >= previousBestDistance) return Intersection::failure();
         Point hitPoint = intersec.hitPoint();
         Vector v = hitPoint - center;
         float dist2 = dot(v, v);
