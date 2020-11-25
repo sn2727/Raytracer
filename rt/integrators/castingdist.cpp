@@ -19,9 +19,16 @@ RayCastingDistIntegrator::RayCastingDistIntegrator(World* world, const RGBColor&
 RGBColor RayCastingDistIntegrator::getRadiance(const Ray& ray) const {
     Intersection intsec = this->world->scene->intersect(ray);
     if (intsec) {
-    float f = (intsec.distance - nearDist) / (farDist - nearDist);
-    RGBColor color = (nearColor * (1.0f - f)) + (farColor * f);
-    return color.clamp() * -dot(intsec.normal(), ray.d.normalize());
+    RGBColor color;
+    if (intsec.distance <= nearDist) { 
+        color = nearColor;
+        } else if (intsec.distance >= farDist) {
+            color = farColor;
+        } else {
+        float f = (intsec.distance - nearDist) / (farDist - nearDist);
+        color = (nearColor * (1.0f - f)) + (farColor * f);}
+        return color.clamp() * -dot(intsec.normal(), ray.d.normalize());
+        
     }
     return RGBColor::rep(0);
 }
