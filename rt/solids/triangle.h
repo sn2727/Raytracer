@@ -15,6 +15,12 @@ public:
     virtual Intersection intersect(const Ray& ray, float previousBestDistance = FLT_MAX) const;
     virtual Sample sample() const;
     virtual float getArea() const;
+    Point v1;
+    Point v2;
+    Point v3;
+    float area;
+    Vector normal;
+    float d;
 };
 
 }

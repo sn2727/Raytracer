@@ -29,6 +29,7 @@ public:
     private:
     Vector normal_;
     Point local_;
+    Point hitPoint_;
     
 };
 

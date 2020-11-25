@@ -18,7 +18,7 @@ Intersection InfinitePlane::intersect(const Ray& ray, float previousBestDistance
     float denom = dot(normal, ray.d);
     if (fabs(denom) > epsilon) {
         float t = (dot(origin - ray.o, normal))/denom;
-        if (t >= 0 && t < previousBestDistance) return Intersection(t, ray, this, normal, ray.getPoint(t));
+        if (t >= epsilon && t < previousBestDistance) return Intersection(t, ray, this, normal, ray.getPoint(t));
     }
 
     return Intersection::failure();

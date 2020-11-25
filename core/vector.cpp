@@ -33,8 +33,8 @@ Vector Vector::operator - () const {
 }
 
 Vector Vector::normalize() const {
-    float length = sqrt(pow(this->x,2) + pow(this->y, 2) + pow(this->z,2));
-    assert(length > 0);
+    float length = sqrt(lensqr());
+    assert(length > epsilon);
     return Vector(this -> x / length, this -> y / length, this -> z / length);
 }
 
@@ -47,6 +47,7 @@ Vector operator * (const Vector& a, float scalar) {
 }
 
 Vector operator / (const Vector& a, float scalar) {
+    assert(scalar > epsilon);
     return Vector(a.x / scalar, a.y / scalar, a.z / scalar);
 }
 
@@ -59,11 +60,11 @@ float dot(const Vector& a, const Vector& b) {
 }
 
 float Vector::lensqr() const {
-    return (pow(this->x,2) + pow(this->y, 2) + pow(this->z, 2));
+    return dot(*this, *this);
 }
 
 float Vector::length() const {
-    return sqrt(pow(this->x,2) + pow(this->y, 2) + pow(this->z,2));
+    return sqrt(lensqr());
 }
 
 bool Vector::operator == (const Vector& b) const {

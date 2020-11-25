@@ -14,6 +14,8 @@ public:
     virtual Intersection intersect(const Ray& ray, float previousBestDistance = FLT_MAX) const;
     virtual Sample sample() const;
     virtual float getArea() const;
+    Point corner1;
+    Point corner2;
 };
 
 }

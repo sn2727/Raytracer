@@ -50,10 +50,10 @@ float Sphere::getArea() const {
 
 bool Sphere::solveQuadratic(const float &a, const float &b, const float &c, float &x0, float &x1) const {
     float discr = b * b - 4 * a * c; 
-    if (discr < 0) return false; 
-    else if (discr == 0) x0 = x1 = - 0.5f * b / a; 
+    if (discr < epsilon) return false; 
+    else if (discr < epsilon) x0 = x1 = - 0.5f * b / a; 
     else { 
-        float q = (b > 0) ? 
+        float q = (b > epsilon) ? 
             -0.5f * (b + sqrt(discr)) : 
             -0.5f * (b - sqrt(discr)); 
         x0 = q / a; 

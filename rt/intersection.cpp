@@ -10,7 +10,7 @@ Intersection::Intersection(float distance, const Ray& ray, const Solid* solid, c
     this -> normal_ = normal;
     this -> local_ = local;
     this -> intersects = true;
-
+    this -> hitPoint_ = ray.getPoint(distance); 
 }
 
 Intersection::operator bool() {
@@ -25,7 +25,7 @@ Intersection Intersection::failure() {
 }
 
 Point Intersection::hitPoint() const {
-    return ray.getPoint(distance);
+    return this -> hitPoint_;
 }
 
 Vector Intersection::normal() const {

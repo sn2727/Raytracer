@@ -16,15 +16,10 @@ public:
         float verticalOpeningAngle,
         float horizonalOpeningAngle
         );
-
-    Point center;
-    Vector forward;
-    Vector up;
-    Vector sx;
-    Vector sy;
-    float verticalOpeningAngle;
-    float horizontalOpeningAngle;
-    float d;
+    Point mOrigin;
+    Vector mBaseX;
+    Vector mBaseY;
+    Vector mBaseZ;
 
     virtual Ray getPrimaryRay(float x, float y) const;
 };
