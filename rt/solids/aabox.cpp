@@ -56,7 +56,7 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
     if (tzmax < tmax) 
         tmax = tzmax; 
  
-    if (previousBestDistance <= tmin) return Intersection::failure();
+    if (previousBestDistance <= tmin || tmin < 0) return Intersection::failure();
 
     Point hitPoint = ray.getPoint(tmin);
 
@@ -67,7 +67,7 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
     float dy = (fabs(corner1.y - corner2.y))/2;
     float dz = (fabs(corner1.z - corner2.z))/2;
     Vector normal((int)(p.x/dx),(int) (p.y/dy), (int) (p.z/dz));
-    
+
     return Intersection(tmin, ray, this, normal, hitPoint); 
 }
 
