@@ -21,7 +21,7 @@ RGBColor RayCastingDistIntegrator::getRadiance(const Ray& ray) const {
     if (intsec) {
     float f = (intsec.distance - nearDist) / (farDist - nearDist);
     RGBColor color = (nearColor * (1.0f - f)) + (farColor * f);
-    return color.clamp() * -dot(intsec.normal(), ray.d);
+    return color.clamp() * -dot(intsec.normal(), ray.d.normalize());
     }
     return RGBColor::rep(0);
 }

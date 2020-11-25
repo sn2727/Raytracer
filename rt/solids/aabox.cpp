@@ -68,7 +68,7 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
     float dz = (fabs(corner1.z - corner2.z))/2;
     Vector normal((int)(p.x/dx),(int) (p.y/dy), (int) (p.z/dz));
 
-    return Intersection(tmin, ray, this, normal, hitPoint); 
+    return Intersection(tmin, ray, this, normal.normalize(), hitPoint); 
 }
 
 }

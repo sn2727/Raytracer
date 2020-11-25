@@ -56,7 +56,7 @@ Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
     C = cross(edge4, vp4); 
     if (dot(normal, C) < 0)  return Intersection::failure(); // P is on the right side 
  
-    return Intersection(t, ray, this, normal, hit);
+    return Intersection(t, ray, this, normal.normalize(), hit);
 }
 
 Solid::Sample Quad::sample() const {

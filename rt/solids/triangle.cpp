@@ -39,7 +39,7 @@ Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) con
     if (v < 0.0 || u+v > 1.0f) return Intersection::failure();
     float t = f*dot(edge2, q);
     if (t > epsilon && t < previousBestDistance) {
-        return Intersection(t, ray, this, normal, ray.getPoint(t));
+        return Intersection(t, ray, this, normal.normalize(), ray.getPoint(t));
     } else return Intersection::failure();
 
 }
