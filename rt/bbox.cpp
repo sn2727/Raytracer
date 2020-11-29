@@ -1,5 +1,4 @@
 #include <rt/bbox.h>
-#include <core/point.h>
 
 namespace rt {
 

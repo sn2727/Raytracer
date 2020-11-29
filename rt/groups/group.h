@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <rt/primitive.h>
+#include <rt/bbox.h>
 
 namespace rt {
 

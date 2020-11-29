@@ -3,7 +3,6 @@
 
 #include <core/scalar.h>
 #include <core/vector.h>
-#include <rt/bbox.h>
 #include <rt/intersection.h>
 
 namespace rt {
@@ -11,6 +10,7 @@ namespace rt {
 class Ray;
 class Material;
 class CoordMapper;
+class BBox;
 
 /*
 Primitive represents any object in the virtual scene that can be intersected by a ray.
