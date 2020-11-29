@@ -23,16 +23,23 @@ float AABox::getArea() const {
 }
 
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {
-    float tmin = (corner1.x - ray.o.x) / ray.d.x; 
-    float tmax = (corner2.x - ray.o.x) / ray.d.x; 
- 
+    float tmin = 0;
+    float tmax = 0;
+    if (fabs(ray.d.x) > epsilon) {
+    tmin = (corner1.x - ray.o.x) / ray.d.x; 
+    tmax = (corner2.x - ray.o.x) / ray.d.x; 
+    }
     if (tmin > tmax) std::swap(tmin, tmax); 
  
-    float tymin = (corner1.y - ray.o.y) / ray.d.y; 
-    float tymax = (corner2.y - ray.o.y) / ray.d.y; 
- 
+    float tymin = 0;
+    float tymax = 0;
+    if (fabs(ray.d.y) > epsilon) {
+    tymin = (corner1.y - ray.o.y) / ray.d.y; 
+    tymax = (corner2.y - ray.o.y) / ray.d.y; 
+    }
+
     if (tymin > tymax) std::swap(tymin, tymax); 
- 
+    
     if ((tmin > tymax) || (tymin > tmax)) 
         return Intersection::failure(); 
  
@@ -41,10 +48,14 @@ Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const 
  
     if (tymax < tmax) 
         tmax = tymax; 
- 
-    float tzmin = (corner1.z - ray.o.z) / ray.d.z; 
-    float tzmax = (corner2.z - ray.o.z) / ray.d.z; 
- 
+    
+    float tzmin = 0;
+    float tzmax = 0;
+    if (fabs(ray.d.z) > epsilon){
+    tzmin = (corner1.z - ray.o.z) / ray.d.z; 
+    tzmax = (corner2.z - ray.o.z) / ray.d.z; 
+    }
+
     if (tzmin > tzmax) std::swap(tzmin, tzmax); 
  
     if ((tmin > tzmax) || (tzmin > tmax)) 

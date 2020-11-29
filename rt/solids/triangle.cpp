@@ -18,6 +18,7 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
     this -> edge2 = v3 - v1; 
     this -> normal = cross(edge1,edge2);
     this -> area = 0.5f * normal.length();
+    this -> normal = this -> normal.normalize();
 }
 
 BBox Triangle::getBounds() const {
@@ -39,7 +40,7 @@ Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) con
     if (v < 0.0 || u+v > 1.0f) return Intersection::failure();
     float t = f*dot(edge2, q);
     if (t > epsilon && t < previousBestDistance) {
-        return Intersection(t, ray, this, normal.normalize(), ray.getPoint(t));
+        return Intersection(t, ray, this, normal, ray.getPoint(t));
     } else return Intersection::failure();
 
 }

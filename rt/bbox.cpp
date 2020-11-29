@@ -3,7 +3,7 @@
 namespace rt {
 
 BBox BBox::empty() {
-   return BBox(Point(0,0,0), Point(-1,-1,-1));
+   return BBox(Point(1,1,1), Point(-1,-1,-1));
 }
 
 BBox BBox::full() {
@@ -26,11 +26,19 @@ void BBox::extend(const BBox& bbox) {
 }
 
 std::pair<float, float> BBox::intersect(const Ray& ray) const {
-    float tmin = (min.x - ray.o.x) / ray.d.x; 
-    float tmax = (max.x - ray.o.x) / ray.d.x; 
- 
-    float tymin = (min.y - ray.o.y) / ray.d.y; 
-    float tymax = (max.y - ray.o.y) / ray.d.y; 
+    float tmin = 0;
+    float tmax = 0;
+    if (fabs(ray.d.x) > epsilon){
+    tmin = (min.x - ray.o.x) / ray.d.x; 
+    tmax = (max.x - ray.o.x) / ray.d.x; 
+    }
+
+    float tymin = 0;
+    float tymax = 0;
+    if (fabs(ray.d.y) > epsilon) {
+    tymin = (min.y - ray.o.y) / ray.d.y; 
+    tymax = (max.y - ray.o.y) / ray.d.y; 
+    }
 
     if (tymin > tmin) 
         tmin = tymin; 
@@ -38,16 +46,20 @@ std::pair<float, float> BBox::intersect(const Ray& ray) const {
     if (tymax < tmax) 
         tmax = tymax; 
  
-    float tzmin = (min.z - ray.o.z) / ray.d.z; 
-    float tzmax = (max.z - ray.o.z) / ray.d.z; 
- 
+    float tzmin = 0;
+    float tzmax = 0;
+    if (fabs(ray.d.z) > epsilon) {
+    tzmin = (min.z - ray.o.z) / ray.d.z; 
+    tzmax = (max.z - ray.o.z) / ray.d.z; 
+    }
+
     if (tzmin > tmin) 
         tmin = tzmin; 
  
     if (tzmax < tmax) 
         tmax = tzmax; 
 
-    return std::make_pair(tmin ,tmax);
+    return std::make_pair(tmin, tmax);
 }
 
 bool BBox::isUnbound() {
