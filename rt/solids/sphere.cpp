@@ -9,10 +9,14 @@ Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Materi
     this -> texMapper = texMapper;
     this -> material = material;
     this -> radius2 = radius * radius;
+    this -> area = pi * 4 * radius2;
 }
 
 BBox Sphere::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Point min(center.x + radius, center.y + radius, center.z + radius);
+    Point max(center.x - radius, center.y - radius, center.z - radius);
+    return BBox(min, max);
+
 }
 
 Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const {
@@ -45,7 +49,7 @@ Solid::Sample Sphere::sample() const {
 }
 
 float Sphere::getArea() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return area;
 }
 
 bool Sphere::solveQuadratic(const float &a, const float &b, const float &c, float &x0, float &x1) const {

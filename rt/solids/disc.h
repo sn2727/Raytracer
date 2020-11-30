@@ -20,6 +20,7 @@ public:
     Point center;
     Vector normal;
     InfinitePlane plane;
+    float area;
 };
 
 }

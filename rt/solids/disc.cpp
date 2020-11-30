@@ -11,10 +11,14 @@ Disc::Disc(const Point& center, const Vector& normal, float radius, CoordMapper*
     this -> material = material;
     this -> radius2 = radius*radius;
     this -> plane = InfinitePlane(center, normal, texMapper, material);
+    this -> area = pi * radius2;
 }
 
 BBox Disc::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    float ex = radius*sqrt(1.0f - normal.x*normal.x);
+    float ey = radius*sqrt(1.0f - normal.y*normal.y);
+    float ez = radius*sqrt(1.0f - normal.z*normal.z);
+    return BBox(center - Vector(ex,ey,ez), center + Vector(ex,ey,ez));
 }
 
 Intersection Disc::intersect(const Ray& ray, float previousBestDistance) const {
@@ -39,7 +43,7 @@ Solid::Sample Disc::sample() const {
 }
 
 float Disc::getArea() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return area;
 }
 
 }

@@ -18,6 +18,7 @@ public:
     Point center; 
     float radius;
     float radius2;
+    float area;
 };
 
 }
