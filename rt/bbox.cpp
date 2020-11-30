@@ -14,7 +14,7 @@ BBox BBox::full() {
 
 
 void BBox::extend(const Point& point) {
-    if (empty) {
+    if (empty_) {
         this -> min = point;
         this -> max = point;
         this -> empty_ = false;
@@ -27,7 +27,7 @@ void BBox::extend(const Point& point) {
 }
 
 void BBox::extend(const BBox& bbox) {
-    if (empty) {
+    if (empty_) {
         this -> min = bbox.min;
         this -> max = bbox.max;
         this -> empty_ = false;
