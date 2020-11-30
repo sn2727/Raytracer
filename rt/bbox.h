@@ -20,6 +20,7 @@ public:
     {
         this -> min = min;
         this -> max = max;
+        this -> empty_ = false;
     }
 
     static BBox empty();
@@ -45,6 +46,8 @@ public:
     std::pair<float, float> intersect(const Ray& ray) const;
 
     bool isUnbound();
+    private:
+    bool empty_;
 };
 
 }

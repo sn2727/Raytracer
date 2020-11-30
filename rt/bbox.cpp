@@ -3,7 +3,9 @@
 namespace rt {
 
 BBox BBox::empty() {
-   return BBox(Point(1,1,1), Point(-1,-1,-1));
+    BBox box(Point(1,1,1), Point(0,0,0));
+    box.empty_ = true;
+    return box;
 }
 
 BBox BBox::full() {
@@ -12,17 +14,29 @@ BBox BBox::full() {
 
 
 void BBox::extend(const Point& point) {
-    Point newmin = rt::min(point, this -> min);
-    Point newmax = rt::max(point, this -> max);
-    this -> min = newmin;
-    this -> max = newmax;
+    if (empty) {
+        this -> min = point;
+        this -> max = point;
+        this -> empty_ = false;
+    } else {
+        Point newmin = rt::min(point, this -> min);
+        Point newmax = rt::max(point, this -> max);
+        this -> min = newmin;
+        this -> max = newmax;
+    }
 }
 
 void BBox::extend(const BBox& bbox) {
-    Point newmin = rt::min(bbox.min, this -> min);
-    Point newmax = rt::max(bbox.max, this -> max);
-    this -> min = newmin;
-    this -> max = newmax;
+    if (empty) {
+        this -> min = bbox.min;
+        this -> max = bbox.max;
+        this -> empty_ = false;
+    } else {
+        Point newmin = rt::min(bbox.min, this -> min);
+        Point newmax = rt::max(bbox.max, this -> max);
+        this -> min = newmin;
+        this -> max = newmax;
+    }
 }
 
 std::pair<float, float> BBox::intersect(const Ray& ray) const {
