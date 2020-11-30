@@ -26,36 +26,38 @@ void BBox::extend(const BBox& bbox) {
 }
 
 std::pair<float, float> BBox::intersect(const Ray& ray) const {
-    float tmin = 0;
-    float tmax = 0;
-    if (fabs(ray.d.x) > epsilon){
-    tmin = (min.x - ray.o.x) / ray.d.x; 
-    tmax = (max.x - ray.o.x) / ray.d.x; 
-    }
+    Vector invdir(1/ray.d.x, 1/ray.d.y, 1/ray.d.z);
+    
+    float tmin, tmax, tymin, tymax, tzmin, tzmax; 
 
-    float tymin = 0;
-    float tymax = 0;
-    if (fabs(ray.d.y) > epsilon) {
-    tymin = (min.y - ray.o.y) / ray.d.y; 
-    tymax = (max.y - ray.o.y) / ray.d.y; 
-    }
+    Point bounds[2];
+    bounds[0] = min;
+    bounds[1] = max;
 
+    int sign[3];
+    sign[0] = (invdir.x < 0); 
+    sign[1] = (invdir.y < 0); 
+    sign[2] = (invdir.z < 0);
+
+    tmin = (bounds[sign[0]].x - ray.o.x) * invdir.x; 
+    tmax = (bounds[1-sign[0]].x - ray.o.x) * invdir.x; 
+    tymin = (bounds[sign[1]].y - ray.o.y) * invdir.y; 
+    tymax = (bounds[1-sign[1]].y - ray.o.y) * invdir.y; 
+ 
+    if ((tmin > tymax) || (tymin > tmax)) 
+        return std::make_pair(1,0);
     if (tymin > tmin) 
         tmin = tymin; 
- 
     if (tymax < tmax) 
         tmax = tymax; 
  
-    float tzmin = 0;
-    float tzmax = 0;
-    if (fabs(ray.d.z) > epsilon) {
-    tzmin = (min.z - ray.o.z) / ray.d.z; 
-    tzmax = (max.z - ray.o.z) / ray.d.z; 
-    }
-
+    tzmin = (bounds[sign[2]].z - ray.o.z) * invdir.z; 
+    tzmax = (bounds[1-sign[2]].z - ray.o.z) * invdir.z; 
+ 
+    if ((tmin > tzmax) || (tzmin > tmax)) 
+        return std::make_pair(1,0);
     if (tzmin > tmin) 
         tmin = tzmin; 
- 
     if (tzmax < tmax) 
         tmax = tzmax; 
 
