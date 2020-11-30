@@ -11,7 +11,7 @@ AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper,
 }
 
 BBox AABox::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return BBox(corner1, corner2);
 }
 
 Solid::Sample AABox::sample() const {
@@ -19,7 +19,13 @@ Solid::Sample AABox::sample() const {
 }
 
 float AABox::getArea() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Vector x = Vector(corner2.x - corner1.x, 0, 0); 
+        Vector y = Vector(0, corner2.y - corner1.y, 0);
+        Vector z = Vector(0, 0, corner2.z - corner1.z);
+        float areaX = cross(x,y).length();
+        float areaY = cross(x,z).length();
+        float areaZ = cross(y,z).length();
+        return (2*areaX + 2*areaY + 2*areaZ);
 }
 
 Intersection AABox::intersect(const Ray& ray, float previousBestDistance) const {

@@ -22,7 +22,7 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
 }
 
 BBox Triangle::getBounds() const {
-    /* TODO */ NOT_IMPLEMENTED;
+     return BBox(min(min(v1, v2), v3), max(max(v1,v2), v3));
 }
 
 //Moeller-Trumbore algorithm
