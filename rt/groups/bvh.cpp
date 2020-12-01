@@ -34,8 +34,8 @@ void BVH::builder(Node& n, std::vector<Primitive*> prims) const{
     float xLength = fabs(box.max.x - box.min.x);
     float yLength = fabs(box.max.y - box.min.y);
     float zLength = fabs(box.max.z - box.min.z);
-    Node* left = &Node();
-    Node* right = &Node();
+    Node left = Node();
+    Node right = Node();
     std::vector<Primitive*> leftPrims;
     std::vector<Primitive*> rightPrims;
     BBox boxleft;
@@ -58,12 +58,12 @@ void BVH::builder(Node& n, std::vector<Primitive*> prims) const{
             rightPrims.push_back(prim);
         }
     }
-    left->box = boxleft;
-    right->box = boxright;
-    n.left = left;
-    n.right = right;
-    builder(*left, leftPrims);
-    builder(*right, rightPrims);
+    left.box = boxleft;
+    right.box = boxright;
+    n.left = &left;
+    n.right = &right;
+    builder(left, leftPrims);
+    builder(right, rightPrims);
 }
 
 BBox BVH::getBounds() const {
