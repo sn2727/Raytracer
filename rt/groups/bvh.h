@@ -26,11 +26,11 @@ public:
         std::vector<Primitive*> primitives;
         BBox box;
     };
-    Node* root;
-    mutable Intersection* bestIntersection;
-    void builder(Node* n, std::vector<Primitive*> prims) const;
-    void intersectLeaf(const Ray& ray, Node* node) const;
-    void intersectNode(const Ray& ray, Node* node) const;
+    mutable Node root;
+    mutable Intersection bestIntersection;
+    void builder(Node& n, std::vector<Primitive*> prims) const;
+    void intersectLeaf(const Ray& ray, Node& node) const;
+    void intersectNode(const Ray& ray, Node& node) const;
     void setBestIntersection(Intersection hit);
  
     // Do not use this structure as your node layout:

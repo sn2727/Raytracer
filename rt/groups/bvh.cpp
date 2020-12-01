@@ -4,8 +4,8 @@ namespace rt {
 
 BVH::BVH()
 {
-    this -> root = &Node();
-    this -> bestIntersection = &Intersection::failure();
+    this -> root = Node();
+    this -> bestIntersection = Intersection::failure();
 }
 
 void BVH::rebuildIndex() {
@@ -13,24 +13,24 @@ void BVH::rebuildIndex() {
     for (Primitive* primitive : this -> primitives) {
         box.extend(primitive->getBounds());
     }
-    root->box = box;
+    root.box = box;
     if (primitives.size() > 2){ 
-        root->isLeaf = false;
+        root.isLeaf = false;
         builder(root, primitives);
     } else {
-        root->isLeaf = true;
-        root->primitives = this -> primitives;
+        root.isLeaf = true;
+        root.primitives = this -> primitives;
     }     
     
 }
 
-void BVH::builder(Node* n, std::vector<Primitive*> prims) const{
+void BVH::builder(Node& n, std::vector<Primitive*> prims) const{
     if (prims.size() < 3) {
-        n->isLeaf = true;
-        n->primitives = prims;
+        n.isLeaf = true;
+        n.primitives = prims;
         return;
     }
-    BBox box = n->box;
+    BBox box = n.box;
     float xLength = fabs(box.max.x - box.min.x);
     float yLength = fabs(box.max.y - box.min.y);
     float zLength = fabs(box.max.z - box.min.z);
@@ -60,43 +60,43 @@ void BVH::builder(Node* n, std::vector<Primitive*> prims) const{
     }
     left->box = boxleft;
     right->box = boxright;
-    n->left = left;
-    n->right = right;
-    builder(left, leftPrims);
-    builder(right, rightPrims);
+    n.left = left;
+    n.right = right;
+    builder(*left, leftPrims);
+    builder(*right, rightPrims);
 }
 
 BBox BVH::getBounds() const {
-    return root->box;
+    return root.box;
 }
 
 Intersection BVH::intersect(const Ray& ray, float previousBestDistance) const {
-    this -> bestIntersection = &Intersection::failure();
-    std::pair<float, float> t1t2 = root->box.intersect(ray);
+    this -> bestIntersection = Intersection::failure();
+    std::pair<float, float> t1t2 = root.box.intersect(ray);
     if (t1t2.second >= t1t2.first) intersectNode(ray, root);
-    return *bestIntersection;
+    return bestIntersection;
 }
 
-void BVH::intersectNode(const Ray& ray, Node* node) const {
-    if (node->isLeaf) {
+void BVH::intersectNode(const Ray& ray, Node& node) const {
+    if (node.isLeaf) {
         intersectLeaf(ray, node);
     } else {
-        std::pair<float, float> t1t2left = node->left->box.intersect(ray);
-        std::pair<float, float> t1t2right = node->right->box.intersect(ray);
-        if (t1t2left.second >= t1t2left.first) intersectNode(ray, node->left);
-        if (t1t2right.second >= t1t2right.first) intersectNode(ray, node->right);
+        std::pair<float, float> t1t2left = node.left->box.intersect(ray);
+        std::pair<float, float> t1t2right = node.right->box.intersect(ray);
+        if (t1t2left.second >= t1t2left.first) intersectNode(ray, *node.left);
+        if (t1t2right.second >= t1t2right.first) intersectNode(ray, *node.right);
     }
 }
 
-void BVH::intersectLeaf(const Ray& ray, Node* node) const {
-    if (node->box.min.x > bestIntersection->hitPoint().x && node->box.min.y > bestIntersection->hitPoint().y 
-        && node->box.min.z > bestIntersection->hitPoint().z) {
+void BVH::intersectLeaf(const Ray& ray, Node& node) const {
+    if (node.box.min.x > bestIntersection.hitPoint().x && node.box.min.y > bestIntersection.hitPoint().y 
+        && node.box.min.z > bestIntersection.hitPoint().z) {
             return;
     }
-     for (Primitive* primitive : node->primitives) {
-        Intersection hit = primitive->intersect(ray, this->bestIntersection->distance);
+     for (Primitive* primitive : node.primitives) {
+        Intersection hit = primitive->intersect(ray, this->bestIntersection.distance);
         if (hit) {
-            this -> bestIntersection = &hit;
+            this -> bestIntersection = hit;
         }
     }
 }
