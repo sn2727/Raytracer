@@ -4,7 +4,7 @@ namespace rt {
 
 Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material)
 {
-    /* TODO */
+    Triangle(vertices[0], vertices[1], vertices[2], texMapper, material);
 }
 
 Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)

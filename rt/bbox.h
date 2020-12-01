@@ -28,7 +28,7 @@ public:
 
     void extend(const Point& point);
     void extend(const BBox& bbox);
-
+    bool overlaps(const BBox& bbox);
     Vector diagonal() const {
         return max-min;
     }

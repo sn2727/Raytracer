@@ -9,14 +9,30 @@ namespace rt {
 class BVH : public Group {
 public:
     BVH();
-
+    
     virtual BBox getBounds() const;
     virtual Intersection intersect(const Ray& ray, float previousBestDistance = FLT_MAX) const;
     virtual void rebuildIndex();
     virtual void add(Primitive* p);
     virtual void setMaterial(Material* m);
     virtual void setCoordMapper(CoordMapper* cm);
-
+     
+    struct Node {
+        bool isLeaf;
+        //int axis; //0 is x, 1 is y, 2 is z
+        //float spliLoc;
+        Node* left;
+        Node* right;
+        std::vector<Primitive*> primitives;
+        BBox box;
+    };
+    Node* root;
+    mutable Intersection* bestIntersection;
+    void builder(Node* n, std::vector<Primitive*> prims) const;
+    void intersectLeaf(const Ray& ray, Node* node) const;
+    void intersectNode(const Ray& ray, Node* node) const;
+    void setBestIntersection(Intersection hit);
+ 
     // Do not use this structure as your node layout:
     // It is inefficient and has a large memory footprint.
     struct SerializedNode {

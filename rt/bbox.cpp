@@ -26,6 +26,19 @@ void BBox::extend(const Point& point) {
     }
 }
 
+bool BBox::overlaps(const BBox& bbox){
+    if (empty_) {
+        return false;
+    }
+    if (min.x > bbox.max.x && min.y > bbox.max.y && min.z > bbox.max.z) {
+        return false;
+    }
+    if (max.x < bbox.min.x && max.y < bbox.min.y && max.z < bbox.min.z) {
+        return false;
+    }
+    return true;
+}
+
 void BBox::extend(const BBox& bbox) {
     if (empty_) {
         this -> min = bbox.min;
