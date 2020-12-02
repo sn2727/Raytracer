@@ -27,8 +27,9 @@ namespace rt
     private:
         Primitives unsortedList;
         BVHNode *root = nullptr;
+        bool doSAH = true;
     public:
-        BVH();
+        BVH(bool doSAH = true);
         int numNodes;
         virtual BBox getBounds() const;
         virtual Intersection intersect(const Ray &ray, float previousBestDistance = FLT_MAX) const;

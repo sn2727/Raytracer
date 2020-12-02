@@ -5,9 +5,10 @@
 
 namespace rt
 {
-	BVH::BVH()
+	BVH::BVH(bool doSAH)
 	{
 		root = new BVHNode();
+		this->doSAH = doSAH;
 	}
 
 	BBox BVH::getBounds() const
@@ -56,6 +57,7 @@ namespace rt
 			{
 				return Intersection();
 			}
+			return Intersection();
 		}
 		else if (!node->isLeaf)
 		{
@@ -97,7 +99,6 @@ namespace rt
 				return Intersection();
 			}
 		}
-		return Intersection();
 	}
 
 	void BVH::rebuildIndex()
@@ -151,9 +152,23 @@ namespace rt
 			parentNode->rightChild = new BVHNode();
 			numNodes += 2;
 			int splittingIndex;
-			auto splittingIndexAndDimension = getSplittingIndexAndDimensionSAH(startIndex, endIncludingIndex);
-			splittingIndex = splittingIndexAndDimension.first;
+			if (!doSAH)
+			{
+				auto splitDimensionAndLocation = parentNode->boundingBox.findGreatestDimensionAndMiddleLocation();
+				int dimension = splitDimensionAndLocation.first;
+				float location = splitDimensionAndLocation.second;
+				splittingIndex = getIndexFromPlaneLocation(startIndex, endIncludingIndex, dimension, location);
+				if (splittingIndex >= endIncludingIndex || splittingIndex <= 0)
+				{
+					splittingIndex = (startIndex + endIncludingIndex) / 2;
+				}
+			}
 
+			else
+			{
+				auto splittingIndexAndDimension = getSplittingIndexAndDimensionSAH(startIndex, endIncludingIndex);
+				splittingIndex = splittingIndexAndDimension.first;
+			}
 			setBoundingBoxOfNode(parentNode->leftChild, startIndex, splittingIndex);
 			setBoundingBoxOfNode(parentNode->rightChild, splittingIndex + 1, endIncludingIndex);
 			buildBVH(parentNode->leftChild, startIndex, splittingIndex);
