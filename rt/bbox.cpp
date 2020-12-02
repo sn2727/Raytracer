@@ -49,74 +49,44 @@ namespace rt
 		}
 		this->isEmpty = false;
 	}
-	std::tuple< float, float, bool> BBox::intersect(const Ray & ray) const
+	std::pair< float, float> BBox::intersect(const Ray & ray) const
 	{
-		if ((max - min).lensqr() == 0 || this->isEmpty)
-			return std::tuple< float, float, bool>( maxFloat, minFloat, false);
+	Vector invdir(1/ray.d.x, 1/ray.d.y, 1/ray.d.z);
+    
+    float tmin, tmax, tymin, tymax, tzmin, tzmax; 
 
-		if (min == Point(minFloat, minFloat, minFloat) && 
-			max == Point(maxFloat, maxFloat, maxFloat))
-			return std::tuple<float, float, bool>(minFloat, maxFloat, true);
+    Point bounds[2];
+    bounds[0] = min;
+    bounds[1] = max;
 
-		float minT, maxT;
+    int sign[3];
+    sign[0] = (invdir.x < 0); 
+    sign[1] = (invdir.y < 0); 
+    sign[2] = (invdir.z < 0);
 
-		float tx0 = (min.x - ray.o.x) / ray.d.x;
-		float tx1 = (max.x - ray.o.x) / ray.d.x;
+    tmin = (bounds[sign[0]].x - ray.o.x) * invdir.x; 
+    tmax = (bounds[1-sign[0]].x - ray.o.x) * invdir.x; 
+    tymin = (bounds[sign[1]].y - ray.o.y) * invdir.y; 
+    tymax = (bounds[1-sign[1]].y - ray.o.y) * invdir.y; 
+ 
+    if ((tmin > tymax) || (tymin > tmax)) 
+        return std::make_pair(1,0);
+    if (tymin > tmin) 
+        tmin = tymin; 
+    if (tymax < tmax) 
+        tmax = tymax; 
+ 
+    tzmin = (bounds[sign[2]].z - ray.o.z) * invdir.z; 
+    tzmax = (bounds[1-sign[2]].z - ray.o.z) * invdir.z; 
+ 
+    if ((tmin > tzmax) || (tzmin > tmax)) 
+        return std::make_pair(1,0);
+    if (tzmin > tmin) 
+        tmin = tzmin; 
+    if (tzmax < tmax) 
+        tmax = tzmax; 
 
-		if (tx0 < tx1)
-		{
-			minT = tx0;
-			maxT = tx1;
-		}
-
-		else
-		{
-			minT = tx1;
-			maxT = tx0;
-		}
-
-		float ty0 = (min.y - ray.o.y) / ray.d.y;
-		float ty1 = (max.y - ray.o.y) / ray.d.y;
-
-		float tyMin = std::min(ty0, ty1);
-		float tyMax = std::max(ty0, ty1);
-
-		if ((minT > tyMax) || (tyMin > maxT))
-			return std::tuple<float, float, bool>( tyMin, maxT, false);
-
-		if (tyMin > minT)
-		{
-			minT = tyMin;
-		}
-
-		if (tyMax < maxT)
-		{
-			maxT = tyMax;
-		}
-
-		float tz0 = (min.z - ray.o.z) / ray.d.z;
-		float tz1 = (max.z - ray.o.z) / ray.d.z;
-
-		float tzMin = std::min(tz0, tz1);
-		float tzMax = std::max(tz0, tz1);
-
-		if ((minT > tzMax) || (tzMin > maxT))
-			return std::tuple<float, float, bool>(tzMin, maxT, false);
-
-		if (tzMin > minT)
-		{
-			minT = tzMin;
-		}
-
-		if (tzMax < maxT)
-		{
-			maxT = tzMax;
-		}
-
-		if (minT < 0 && maxT < 0)
-			return std::tuple<float, float, bool>(minT, maxT, false);
-
-		return std::tuple<float, float, bool>(minT, maxT, true);
+    return std::make_pair(tmin, tmax);
 	}
 
 

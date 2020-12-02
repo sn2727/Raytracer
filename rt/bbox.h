@@ -33,7 +33,7 @@ public:
             return max - min;
     }
 
-    std::tuple< float, float, bool> intersect(const Ray & ray) const;
+    std::pair< float, float> intersect(const Ray & ray) const;
 
     bool isUnbound();
     std::pair<int, float> findGreatestDimensionAndMiddleLocation();

@@ -28,7 +28,7 @@ namespace rt
 			return Intersection();
 		}
 		auto t1t2 = node->boundingBox.intersect(ray);
-		bool isIntersected = std::get<2>(t1t2);
+		bool isIntersected = t1t2.second >= t1t2.first;
 		float minT = std::abs(std::get<0>(t1t2));
 		if (!isIntersected || minT > previousBestDistance)
 		{
