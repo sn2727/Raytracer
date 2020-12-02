@@ -4,8 +4,10 @@
 #include <utility>
 #include <core/point.h>
 #include <core/vector.h>
-#include <rt/solids/solid.h>
 
+
+extern const float maxFloat;
+extern const float minFloat;
 
 namespace rt {
 
@@ -13,43 +15,36 @@ class Ray;
 
 class BBox {
 public:
-    Point min, max;
-
+    Point minCorner, maxCorner;
+    bool isEmpty = true;
     BBox() {}
-    BBox(const Point& min, const Point& max)
-    {
-        this -> min = min;
-        this -> max = max;
-        this -> empty_ = false;
-    }
-
+    BBox(const Point& min, const Point& max) : minCorner(min), maxCorner(max) { this->isEmpty = false; }
     static BBox empty();
     static BBox full();
 
     void extend(const Point& point);
     void extend(const BBox& bbox);
-    bool overlaps(const BBox& bbox);
+    void Inflate(float factor);
+
     Vector diagonal() const {
-        return max-min;
+        if (this->isEmpty)
+            return Vector(0, 0, 0);
+        else
+            return maxCorner - minCorner;
     }
 
-    float area() const {
-        Vector x = Vector(max.x - min.x, 0, 0); 
-        Vector y = Vector(0, max.y - min.y, 0);
-        Vector z = Vector(0, 0, max.z - min.z);
-        float areaX = cross(x,y).length();
-        float areaY = cross(x,z).length();
-        float areaZ = cross(y,z).length();
-        return (2*areaX + 2*areaY + 2*areaZ);
-    }
-
-    std::pair<float, float> intersect(const Ray& ray) const;
+    std::tuple< float, float, bool> intersect(const Ray & ray) const;
 
     bool isUnbound();
-    private:
-    bool empty_;
+    std::pair<int, float> findGreatestDimensionAndMiddleLocation();
+    float getSurfaceArea();
+    float getXLength();
+    float getYLength();
+    float getZLength();
+
 };
 
 }
+
 
 #endif
