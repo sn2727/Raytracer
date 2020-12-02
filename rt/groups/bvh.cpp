@@ -206,17 +206,17 @@ namespace rt
 			float startLocation;
 			if (dimensionIndex == 0)
 			{
-				startLocation = bigBox.minCorner.x;
+				startLocation = bigBox.min.x;
 				totalDistance = bigBox.getXLength();
 			}
 			else if (dimensionIndex == 1)
 			{
-				startLocation = bigBox.minCorner.y;
+				startLocation = bigBox.min.y;
 				totalDistance = bigBox.getYLength();
 			}
 			else if (dimensionIndex == 2)
 			{
-				startLocation = bigBox.minCorner.z;
+				startLocation = bigBox.min.z;
 				totalDistance = bigBox.getZLength();
 			}
 
@@ -270,13 +270,13 @@ namespace rt
 		switch (dimensionIndex)
 		{
 		case 0:
-			return lBox.minCorner.x < rBox.minCorner.x;
+			return lBox.min.x < rBox.min.x;
 
 		case 1:
-			return lBox.minCorner.y < rBox.minCorner.y;
+			return lBox.min.y < rBox.min.y;
 
 		case 2:
-			return lBox.minCorner.z < rBox.minCorner.z;
+			return lBox.min.z < rBox.min.z;
 		default:
 			throw;
 		}
@@ -287,13 +287,13 @@ namespace rt
 		switch (dimensionIndex)
 		{
 		case 0:
-			return l->getBounds().minCorner.x < valueToCompare;
+			return l->getBounds().min.x < valueToCompare;
 
 		case 1:
-			return l->getBounds().minCorner.y < valueToCompare;
+			return l->getBounds().min.y < valueToCompare;
 
 		case 2:
-			return l->getBounds().minCorner.z < valueToCompare;
+			return l->getBounds().min.z < valueToCompare;
 
 		default:
 			throw;

@@ -25,13 +25,13 @@ namespace rt
 	{
 		if (this->isEmpty)
 		{
-			minCorner = point;
-			maxCorner = point;
+			min = point;
+			max = point;
 		}
 		else
 		{
-			minCorner = min(this->minCorner, point);
-			maxCorner = max(this->maxCorner, point);
+			min = rt::min(this->min, point);
+			max = rt::max(this->max, point);
 		}
 		this->isEmpty = false;
 	}
@@ -39,29 +39,29 @@ namespace rt
 	{
 		if (this->isEmpty)
 		{
-			this->minCorner = bbox.minCorner;
-			this->maxCorner = bbox.maxCorner;
+			this->min = bbox.min;
+			this->max = bbox.max;
 		}
 		else
 		{
-			this->maxCorner = max(this->maxCorner, bbox.maxCorner);
-			this->minCorner = min(this->minCorner, bbox.minCorner);
+			this->max = rt::max(this->max, bbox.max);
+			this->min = rt::min(this->min, bbox.min);
 		}
 		this->isEmpty = false;
 	}
 	std::tuple< float, float, bool> BBox::intersect(const Ray & ray) const
 	{
-		if ((maxCorner - minCorner).lensqr() == 0 || this->isEmpty)
+		if ((max - min).lensqr() == 0 || this->isEmpty)
 			return std::tuple< float, float, bool>( maxFloat, minFloat, false);
 
-		if (minCorner == Point(minFloat, minFloat, minFloat) && 
-			maxCorner == Point(maxFloat, maxFloat, maxFloat))
+		if (min == Point(minFloat, minFloat, minFloat) && 
+			max == Point(maxFloat, maxFloat, maxFloat))
 			return std::tuple<float, float, bool>(minFloat, maxFloat, true);
 
 		float minT, maxT;
 
-		float tx0 = (minCorner.x - ray.o.x) / ray.d.x;
-		float tx1 = (maxCorner.x - ray.o.x) / ray.d.x;
+		float tx0 = (min.x - ray.o.x) / ray.d.x;
+		float tx1 = (max.x - ray.o.x) / ray.d.x;
 
 		if (tx0 < tx1)
 		{
@@ -75,8 +75,8 @@ namespace rt
 			maxT = tx0;
 		}
 
-		float ty0 = (minCorner.y - ray.o.y) / ray.d.y;
-		float ty1 = (maxCorner.y - ray.o.y) / ray.d.y;
+		float ty0 = (min.y - ray.o.y) / ray.d.y;
+		float ty1 = (max.y - ray.o.y) / ray.d.y;
 
 		float tyMin = std::min(ty0, ty1);
 		float tyMax = std::max(ty0, ty1);
@@ -94,8 +94,8 @@ namespace rt
 			maxT = tyMax;
 		}
 
-		float tz0 = (minCorner.z - ray.o.z) / ray.d.z;
-		float tz1 = (maxCorner.z - ray.o.z) / ray.d.z;
+		float tz0 = (min.z - ray.o.z) / ray.d.z;
+		float tz1 = (max.z - ray.o.z) / ray.d.z;
 
 		float tzMin = std::min(tz0, tz1);
 		float tzMax = std::max(tz0, tz1);
@@ -122,9 +122,9 @@ namespace rt
 
 	void BBox::Inflate(float factor)
 	{
-		float width = maxCorner.x - minCorner.x;
-		float length = maxCorner.y - minCorner.y;
-		float height = maxCorner.z - minCorner.z;
+		float width = max.x - min.x;
+		float length = max.y - min.y;
+		float height = max.z - min.z;
 		Vector inflationVector = Vector(0, 0, 0);
 		if (width < length)
 		{
@@ -148,14 +148,14 @@ namespace rt
 				inflationVector = Vector(0, 0, factor);
 			}
 		}
-		this->minCorner = this->minCorner - inflationVector;
-		this->maxCorner = this->maxCorner + inflationVector;
+		this->min = this->min - inflationVector;
+		this->max = this->max + inflationVector;
 	}
 
 	bool BBox::isUnbound()
 	{
-		if (minCorner.x == minFloat || minCorner.y == minFloat || minCorner.z == minFloat ||
-			maxCorner.x == maxFloat || maxCorner.y == maxFloat || maxCorner.z == maxFloat)
+		if (min.x == minFloat || min.y == minFloat || min.z == minFloat ||
+			max.x == maxFloat || max.y == maxFloat || max.z == maxFloat)
 			return 1;
 
 		return 0;
@@ -163,24 +163,24 @@ namespace rt
 
 	std::pair<int, float> BBox::findGreatestDimensionAndMiddleLocation()
 	{
-		float xLength = maxCorner.x - minCorner.x;
-		float yLength = maxCorner.y - minCorner.y;
-		float zLength = maxCorner.z - minCorner.z;
+		float xLength = max.x - min.x;
+		float yLength = max.y - min.y;
+		float zLength = max.z - min.z;
 		if (xLength > yLength)
 		{
 			if (xLength > zLength)
-				return std::pair<int, float>(0, xLength / 2 + minCorner.x);
+				return std::pair<int, float>(0, xLength / 2 + min.x);
 
 			else
-				return std::pair<int, float>(2, zLength / 2 + minCorner.z);
+				return std::pair<int, float>(2, zLength / 2 + min.z);
 		}
 
 		else
 		{
 			if (yLength > zLength)
-				return std::pair<int, float>(1, yLength / 2 + minCorner.y);
+				return std::pair<int, float>(1, yLength / 2 + min.y);
 			else
-				return std::pair<int, float>(2, zLength / 2 + minCorner.z);
+				return std::pair<int, float>(2, zLength / 2 + min.z);
 		}
 
 		return std::pair<int, float>();
@@ -188,9 +188,9 @@ namespace rt
 
 	float BBox::getSurfaceArea()
 	{
-		float length = maxCorner.x - minCorner.x;
-		float width = maxCorner.y - minCorner.y;
-		float height = maxCorner.z - minCorner.z;
+		float length = max.x - min.x;
+		float width = max.y - min.y;
+		float height = max.z - min.z;
 
 		float xyPlaneArea = fabs(length * width);
 		float yzPlaneArea = fabs(width * height);
@@ -203,7 +203,7 @@ namespace rt
 		if (isEmpty)
 			return 0;
 
-		return this->maxCorner.x - this->minCorner.x;
+		return this->max.x - this->min.x;
 	}
 
 	float BBox::getYLength()
@@ -211,7 +211,7 @@ namespace rt
 		if (isEmpty)
 			return 0;
 
-		return this->maxCorner.y - this->minCorner.y;
+		return this->max.y - this->min.y;
 	}
 
 	float BBox::getZLength()
@@ -219,6 +219,6 @@ namespace rt
 		if (isEmpty)
 			return 0;
 
-		return this->maxCorner.z - this->minCorner.z;
+		return this->max.z - this->min.z;
 	}
 }

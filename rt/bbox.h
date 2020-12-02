@@ -15,10 +15,10 @@ class Ray;
 
 class BBox {
 public:
-    Point minCorner, maxCorner;
+    Point min, max;
     bool isEmpty = true;
     BBox() {}
-    BBox(const Point& min, const Point& max) : minCorner(min), maxCorner(max) { this->isEmpty = false; }
+    BBox(const Point& min, const Point& max) : min(min), max(max) { this->isEmpty = false; }
     static BBox empty();
     static BBox full();
 
@@ -30,7 +30,7 @@ public:
         if (this->isEmpty)
             return Vector(0, 0, 0);
         else
-            return maxCorner - minCorner;
+            return max - min;
     }
 
     std::tuple< float, float, bool> intersect(const Ray & ray) const;
