@@ -1,27 +1,29 @@
 #include "bvh.h"
-#include<rt/bbox.h>
-#include<rt/intersection.h>
-#include<tuple>
+#include <rt/bbox.h>
+#include <rt/intersection.h>
+#include <tuple>
 
 namespace rt
 {
-	BVH::BVH(bool doSAH)
+	BVH::BVH()
 	{
 		root = new BVHNode();
-		this->doSAH = doSAH;
 	}
+
 	BBox BVH::getBounds() const
 	{
-		if(root)
+		if (root)
 			return root->boundingBox;
 		else
 			return BBox();
 	}
-	Intersection BVH::intersect(const Ray & ray, float previousBestDistance) const
+
+	Intersection BVH::intersect(const Ray &ray, float previousBestDistance) const
 	{
 		return intersectNode(ray, previousBestDistance, root);
 	}
-	Intersection BVH::intersectNode(const Ray & ray, float previousBestDistance, BVHNode* node) const
+
+	Intersection BVH::intersectNode(const Ray &ray, float previousBestDistance, BVHNode *node) const
 	{
 		if (node == nullptr)
 		{
@@ -94,7 +96,7 @@ namespace rt
 			{
 				return Intersection();
 			}
-		} 
+		}
 		return Intersection();
 	}
 
@@ -107,14 +109,14 @@ namespace rt
 	{
 	}
 
-	void BVH::add(Primitive * p)
+	void BVH::add(Primitive *p)
 	{
 		unsortedList.push_back(p);
 		BBox currentBox = p->getBounds();
 		root->extendBox(currentBox);
 	}
 
-	void BVH::setMaterial(Material * m)
+	void BVH::setMaterial(Material *m)
 	{
 		for (int i = 0; i < unsortedList.size(); i++)
 		{
@@ -122,7 +124,7 @@ namespace rt
 		}
 	}
 
-	void BVH::setCoordMapper(CoordMapper * cm)
+	void BVH::setCoordMapper(CoordMapper *cm)
 	{
 		for (int i = 0; i < unsortedList.size(); i++)
 		{
@@ -130,7 +132,7 @@ namespace rt
 		}
 	}
 
-	void BVH::buildBVH(BVHNode* parentNode, int startIndex, int endIncludingIndex)
+	void BVH::buildBVH(BVHNode *parentNode, int startIndex, int endIncludingIndex)
 	{
 		int numElements = endIncludingIndex - startIndex + 1;
 		if (numElements < 0)
@@ -149,23 +151,9 @@ namespace rt
 			parentNode->rightChild = new BVHNode();
 			numNodes += 2;
 			int splittingIndex;
-			if (!doSAH)
-			{
-				auto splitDimensionAndLocation = parentNode->boundingBox.findGreatestDimensionAndMiddleLocation();
-				int dimension = splitDimensionAndLocation.first;
-				float location = splitDimensionAndLocation.second;
-				splittingIndex = getIndexFromPlaneLocation(startIndex, endIncludingIndex, dimension, location);
-				if (splittingIndex >= endIncludingIndex || splittingIndex <= 0)
-				{
-					splittingIndex = (startIndex + endIncludingIndex) / 2;
-				}
-			}
+			auto splittingIndexAndDimension = getSplittingIndexAndDimensionSAH(startIndex, endIncludingIndex);
+			splittingIndex = splittingIndexAndDimension.first;
 
-			else
-			{
-				auto splittingIndexAndDimension = getSplittingIndexAndDimensionSAH(startIndex, endIncludingIndex);
-				splittingIndex = splittingIndexAndDimension.first;
-			}
 			setBoundingBoxOfNode(parentNode->leftChild, startIndex, splittingIndex);
 			setBoundingBoxOfNode(parentNode->rightChild, splittingIndex + 1, endIncludingIndex);
 			buildBVH(parentNode->leftChild, startIndex, splittingIndex);
@@ -177,10 +165,9 @@ namespace rt
 	{
 		auto startItr = unsortedList.begin() + startIndex;
 		auto endItr = unsortedList.end() - (unsortedList.size() - endIncludingIndex) + 1;
-		std::sort(startItr, endItr, PrimitiveComparator(dimensionIndex));	//TODO: This is splitting upon minCorner location, maybe centre is better?
+		std::sort(startItr, endItr, PrimitiveComparator(dimensionIndex)); //TODO: This is splitting upon minCorner location, maybe centre is better?
 		auto newItr = std::lower_bound(startItr, endItr, planeLocation, PrimitiveComparator(dimensionIndex));
 		return (newItr - startItr) + startIndex - 1;
-
 	}
 
 	void BVH::setBoundingBoxOfNode(BVHNode *node, unsigned int startIndex, unsigned int endIncludingIndex)
@@ -226,7 +213,7 @@ namespace rt
 
 				float splitLocation = startLocation + leftDistance;
 				auto newItr = std::lower_bound(startItr, endItr, splitLocation, PrimitiveComparator(dimensionIndex));
-				
+
 				int splitIndex = (newItr - startItr) + startIndex - 1;
 
 				int numberPrimitivesLeft = splitIndex - startIndex + 1;
@@ -235,8 +222,8 @@ namespace rt
 				BBox bboxLeft = getBBoxOfPrimitives(startIndex, splitIndex);
 				BBox bboxRight = getBBoxOfPrimitives(splitIndex + 1, endIncludingIndex);
 
-				float currentCost = numberPrimitivesLeft *  bboxLeft.getSurfaceArea() / bigBox.getSurfaceArea() +
-					numberPrimitivesRight * bboxRight.getSurfaceArea() / bigBox.getSurfaceArea();
+				float currentCost = numberPrimitivesLeft * bboxLeft.getSurfaceArea() / bigBox.getSurfaceArea() +
+									numberPrimitivesRight * bboxRight.getSurfaceArea() / bigBox.getSurfaceArea();
 
 				if (currentCost < minCost)
 				{
@@ -261,9 +248,9 @@ namespace rt
 		return box;
 	}
 
-	PrimitiveComparator::PrimitiveComparator(int dimensionIndex) :dimensionIndex(dimensionIndex) {}
+	PrimitiveComparator::PrimitiveComparator(int dimensionIndex) : dimensionIndex(dimensionIndex) {}
 
-	bool PrimitiveComparator::operator()(const Primitive* l, const Primitive* r) const
+	bool PrimitiveComparator::operator()(const Primitive *l, const Primitive *r) const
 	{
 		BBox lBox = l->getBounds();
 		BBox rBox = r->getBounds();
@@ -282,7 +269,7 @@ namespace rt
 		}
 	}
 
-	bool PrimitiveComparator::operator()(const Primitive* l, float valueToCompare) const
+	bool PrimitiveComparator::operator()(const Primitive *l, float valueToCompare) const
 	{
 		switch (dimensionIndex)
 		{
@@ -299,4 +286,4 @@ namespace rt
 			throw;
 		}
 	}
-}
+} // namespace rt
