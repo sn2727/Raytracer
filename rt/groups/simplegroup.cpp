@@ -3,11 +3,13 @@
 namespace rt {
 
 BBox SimpleGroup::getBounds() const {
-    BBox box = BBox::empty();
-    for (Primitive* primitive : this -> primitives) {
-        box.extend(primitive->getBounds());
-    }
-    return box;
+    int size = primitives.size();
+	BBox bbox = BBox::empty();
+	for (int i = 0; i < size; ++i)
+	{
+		bbox.extend(primitives[i] -> getBounds());
+	}
+	return bbox;
 }
 
 Intersection SimpleGroup::intersect( const Ray& ray, float previousBestDistance) const {
