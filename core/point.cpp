@@ -15,7 +15,10 @@ Point::Point(float x, float y, float z)
 
 Point::Point(const Float4& f4)
 {
-    /* TODO */ NOT_IMPLEMENTED;
+    assert(f4[3]==1);
+    this -> x = f4[0];
+    this -> y = f4[1];
+    this -> z = f4[2];
 }
 
 Vector Point::operator - (const Point& b) const {
