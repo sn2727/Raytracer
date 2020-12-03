@@ -112,18 +112,18 @@ Matrix product(const Matrix& a, const Matrix& b) {
 
 Matrix operator*(const Matrix& a, float scalar) {
     return Matrix(
-        Float4(a.r1[0]*scalar, a.r2[0]*scalar, a.r3[0]*scalar, a.r4[0]*scalar),
-        Float4(a.r1[1]*scalar, a.r2[1]*scalar, a.r3[1]*scalar, a.r4[1]*scalar),
-        Float4(a.r1[2]*scalar, a.r2[2]*scalar, a.r3[2]*scalar, a.r4[2]*scalar),
-        Float4(a.r1[3]*scalar, a.r2[3]*scalar, a.r3[3]*scalar, a.r4[3]*scalar));
+        Float4(a.r1[0]*scalar, a.r1[1]*scalar, a.r1[2]*scalar, a.r1[3]*scalar),
+        Float4(a.r2[0]*scalar, a.r2[1]*scalar, a.r2[2]*scalar, a.r2[3]*scalar),
+        Float4(a.r3[0]*scalar, a.r3[1]*scalar, a.r3[2]*scalar, a.r3[3]*scalar),
+        Float4(a.r4[0]*scalar, a.r4[1]*scalar, a.r4[2]*scalar, a.r4[3]*scalar));
 }
 
 Matrix operator*(float scalar, const Matrix& a) {
     return Matrix(
-        Float4(a.r1[0]*scalar, a.r2[0]*scalar, a.r3[0]*scalar, a.r4[0]*scalar),
-        Float4(a.r1[1]*scalar, a.r2[1]*scalar, a.r3[1]*scalar, a.r4[1]*scalar),
-        Float4(a.r1[2]*scalar, a.r2[2]*scalar, a.r3[2]*scalar, a.r4[2]*scalar),
-        Float4(a.r1[3]*scalar, a.r2[3]*scalar, a.r3[3]*scalar, a.r4[3]*scalar));
+        Float4(a.r1[0]*scalar, a.r1[1]*scalar, a.r1[2]*scalar, a.r1[3]*scalar),
+        Float4(a.r2[0]*scalar, a.r2[1]*scalar, a.r2[2]*scalar, a.r2[3]*scalar),
+        Float4(a.r3[0]*scalar, a.r3[1]*scalar, a.r3[2]*scalar, a.r3[3]*scalar),
+        Float4(a.r4[0]*scalar, a.r4[1]*scalar, a.r4[2]*scalar, a.r4[3]*scalar));
 }
 
 Float4 Matrix::operator*(const Float4& b) const {

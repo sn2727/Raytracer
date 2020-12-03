@@ -15,10 +15,15 @@ Point::Point(float x, float y, float z)
 
 Point::Point(const Float4& f4)
 {
-    assert(f4[3]==1);
-    this -> x = f4[0];
-    this -> y = f4[1];
-    this -> z = f4[2];
+    if (fabs(f4[3]) > epsilon) {
+        this -> x = 0;
+        this -> y = 0;
+        this -> z = 0;
+    } else {
+        this -> x = f4[0]/f4[3];
+        this -> y = f4[1]/f4[3];
+        this -> z = f4[2]/f4[3];
+    }
 }
 
 Vector Point::operator - (const Point& b) const {
