@@ -32,6 +32,7 @@ float& Float4::operator [] (int idx) {
     if (idx == 1) return this -> y;
     if (idx == 2) return this -> z;
     if (idx == 3) return this -> w;
+    assert(false);
 
 }
 
@@ -40,6 +41,7 @@ float Float4::operator [] (int idx) const {
     if (idx == 1) return this -> y;
     if (idx == 2) return this -> z;
     if (idx == 3) return this -> w;
+    assert(false);
 }
 
 Float4 Float4::operator + (const Float4& b) const {
@@ -86,7 +88,7 @@ bool Float4::operator == (const Float4& b) const {
 }
 
 bool Float4::operator != (const Float4& b) const {
-    return (x != b.x && y != b.y && z != b.z && w != b.w);
+    return !(x == b.x && y == b.y && z == b.z && w == b.w);
 }
 
 Float4 min(const Float4& a, const Float4& b) {

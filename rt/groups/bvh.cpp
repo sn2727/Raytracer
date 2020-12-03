@@ -99,6 +99,7 @@ namespace rt
 				return Intersection();
 			}
 		}
+		return Intersection();
 	}
 
 	void BVH::rebuildIndex()

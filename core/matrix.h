@@ -9,7 +9,7 @@ class Matrix {
 public:
     Matrix() {}
     Matrix(const Float4& r1, const Float4& r2, const Float4& r3, const Float4& r4);
-
+    Float4 r1,r2,r3,r4;
     Float4& operator[](int idx);
     Float4 operator[](int idx) const;
 
