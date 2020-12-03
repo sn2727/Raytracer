@@ -15,7 +15,7 @@ Point::Point(float x, float y, float z)
 
 Point::Point(const Float4& f4)
 {
-    if (fabs(f4[3]) > epsilon) {
+    if (fabs(f4[3]) < epsilon) {
         this -> x = 0;
         this -> y = 0;
         this -> z = 0;
