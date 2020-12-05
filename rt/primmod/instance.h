@@ -4,6 +4,8 @@
 #include <core/vector.h>
 #include <rt/primitive.h>
 #include <rt/bbox.h>
+#include <core/matrix.h>
+#include <vector>
 
 namespace rt {
 
@@ -11,6 +13,8 @@ class Instance : public Primitive {
 public:
     Instance(Primitive* content);
     Primitive* content();
+    Primitive* archetype;
+    std::vector<Matrix> TMatrices;
 
     void reset(); //reset transformation back to identity
     void translate(const Vector& t);
