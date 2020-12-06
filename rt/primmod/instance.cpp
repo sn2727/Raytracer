@@ -78,6 +78,9 @@ Intersection Instance::intersect(const Ray& ray, float previousBestDistance) con
     }
     Ray invertedRay(o, d);
     Intersection intsec = this -> archetype->intersect(invertedRay, previousBestDistance);
+    if (!intsec) {
+        return Intersection::failure();
+    }
     Vector normal = intsec.normal();
     for (Matrix m : TMatrices) {
         normal = m * normal;        
