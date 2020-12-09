@@ -84,11 +84,13 @@ Float4 Float4::operator - () const {
 }
 
 bool Float4::operator == (const Float4& b) const {
-    return (x == b.x && y == b.y && z == b.z && w == b.w);
+    return (fabs(x-b.x) <= epsilon && fabs(y-b.y) <= epsilon &&
+            fabs(z-b.z) <= epsilon && fabs(w-b.w) <= epsilon);
 }
 
 bool Float4::operator != (const Float4& b) const {
-    return !(x == b.x && y == b.y && z == b.z && w == b.w);
+    return !(fabs(x-b.x) <= epsilon && fabs(y-b.y) <= epsilon &&
+             fabs(z-b.z) <= epsilon && fabs(w-b.w) <= epsilon);
 }
 
 Float4 min(const Float4& a, const Float4& b) {
