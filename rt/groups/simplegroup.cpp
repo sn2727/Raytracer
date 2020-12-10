@@ -33,7 +33,9 @@ void SimpleGroup::add(Primitive* p) {
 }
 
 void SimpleGroup::setMaterial(Material* m) {
-    /* TODO */ NOT_IMPLEMENTED;
+    for (Primitive* primitive : this -> primitives) {
+        primitive->setMaterial(m);
+    }
 }
 
 void SimpleGroup::setCoordMapper(CoordMapper* cm) {
