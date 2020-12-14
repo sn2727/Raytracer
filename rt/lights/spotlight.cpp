@@ -6,7 +6,7 @@ namespace rt {
 SpotLight::SpotLight(const Point& position, const Vector& direction, float angle, float power, const RGBColor& intensity)
 {
     this -> position = position;
-    this -> direction = -direction;
+    this -> direction = direction;
     this -> angle = angle;
     this -> power = power;
     this -> intensity = intensity;

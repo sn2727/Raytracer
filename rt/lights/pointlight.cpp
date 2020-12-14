@@ -13,9 +13,9 @@ PointLight::PointLight(const Point& position, const RGBColor& intensity)
 
 LightHit PointLight::getLightHit(const Point& p) const { 
     Vector dir = position - p;
-    Vector dirN = dir.normalize();
+    
     float distance = dir.length();   
-    LightHit hit = {dir, distance, dirN};
+    LightHit hit = {dir, distance, Vector(1,0,0)};
     return hit;
 }
 
