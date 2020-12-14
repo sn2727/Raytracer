@@ -13,8 +13,9 @@ SpotLight::SpotLight(const Point& position, const Vector& direction, float angle
 }
 
 RGBColor SpotLight::getIntensity(const LightHit& irr) const {
+    if (fabs(irr.distance) < epsilon) return intensity;
     float ang = dot(direction, irr.direction);
-    if (ang >= angle) {
+    if (fabs(ang) >= angle) {
         return RGBColor::rep(0);
     }
     return intensity/(irr.distance*irr.distance);

@@ -20,6 +20,7 @@ LightHit PointLight::getLightHit(const Point& p) const {
 }
 
 RGBColor PointLight::getIntensity(const LightHit& irr) const {
+    if (fabs(irr.distance) < epsilon) return intensity;
     return intensity/(irr.distance*irr.distance);
 }
 
