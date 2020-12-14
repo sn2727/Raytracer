@@ -3,6 +3,7 @@
 
 #include <core/assert.h>
 #include <core/vector.h>
+#include <core/scalar.h>
 
 namespace rt {
 

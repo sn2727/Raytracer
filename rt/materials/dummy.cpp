@@ -1,18 +1,19 @@
 #include <rt/materials/dummy.h>
 #include <core/assert.h>
+#include <cmath>
 
 namespace rt {
 
 DummyMaterial::DummyMaterial() {
-    /* TODO */
+    this -> fr = 1;
 }
 
 RGBColor DummyMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return RGBColor::rep(fr  * dot(inDir.normalize(), normal)).clamp();
 }
 
 RGBColor DummyMaterial::getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
-   /* TODO */ NOT_IMPLEMENTED;
+   return RGBColor::rep(0);
 }
 
 Material::SampleReflectance DummyMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {

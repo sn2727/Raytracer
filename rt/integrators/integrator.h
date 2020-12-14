@@ -3,7 +3,7 @@
 
 #include <core/assert.h>
 #include <core/color.h>
-
+ 
 namespace rt {
 
 class World;
