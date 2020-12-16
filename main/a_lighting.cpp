@@ -8,12 +8,14 @@
 
 #include <rt/cameras/perspective.h>
 #include <rt/solids/quad.h>
+#include <rt/solids/sphere.h>
 #include <rt/groups/simplegroup.h>
 #include <rt/materials/dummy.h>
 
 #include <rt/lights/pointlight.h>
 #include <rt/lights/spotlight.h>
 #include <rt/lights/directional.h>
+#include <rt/lights/projectivelight.h>
 
 #include <rt/integrators/raytrace.h>
 
@@ -106,6 +108,42 @@ void renderCornellboxB(float scale, const char* filename) {
     engine.render(img);
     img.writePNG(filename);
 }
+
+void renderCornellboxBonus(float scale, const char* filename) {
+    Image img(400, 400);
+    World world;
+    Group* scene = new SimpleGroup();
+    world.scene = scene;
+
+    PerspectiveCamera cam(Point(278*scale, 273*scale, -800*scale), Vector(0, 0, 1), Vector(0, 1, 0), 0.686f, 0.686f);
+
+    DummyMaterial* mat = new DummyMaterial();
+
+    // walls
+    makeWalls(scene, scale, nullptr, mat);
+
+    //short box
+    makeBox(scene, Point(082.f, 000.1f, 225.f)*scale, Vector(158.f, 000.f, 047.f)*scale, Vector(048.f, 000.f, -160.f)*scale, Vector(000.f, 165.f, 000.f)*scale, nullptr, mat);
+
+    //tall box
+    makeBox(scene, Point(265.f, 000.1f, 296.f)*scale, Vector(049.f, 000.f, 160.f)*scale, Vector(158.f, 000.f, -049.f)*scale, Vector(000.f, 330.f, 000.f)*scale, nullptr, mat);
+
+    //some spheres
+    scene->add(new Sphere(Point(380.f, 90.f, 200.f)*scale, 99.f*scale, nullptr, mat));
+    scene->add(new Sphere(Point(50.f, 300.f, 250.f)*scale, 99.f*scale, nullptr, mat));
+    scene->add(new Sphere(Point(560.f, 250.f, 80.f)*scale, 99.f*scale, nullptr, mat));
+
+    //projective lights
+    world.light.push_back(new ProjectiveLight(Point(520.f, 120.f, 80.f)*scale,RGBColor::rep(500000.0f*scale*scale)));
+    world.light.push_back(new ProjectiveLight(Point(70.f, 200.f, 80.f)*scale,RGBColor::rep(500000.0f*scale*scale)));
+    world.light.push_back(new ProjectiveLight(Point(400.f, 520.f, 400.f)*scale,RGBColor::rep(500000.0f*scale*scale)));
+
+    RayTracingIntegrator integrator(&world);
+
+    Renderer engine(&cam, &integrator);
+    engine.render(img);
+    img.writePNG(filename);
+}
 }
 
 void a_lighting() {
@@ -113,4 +151,5 @@ void a_lighting() {
     renderCornellboxA(0.01f, "a5-2.png");
     renderCornellboxB(0.001f, "a5-3.png");
     renderCornellboxB(0.01f, "a5-4.png");
+    renderCornellboxBonus(0.001f, "a5-5-bonus.png");
 }

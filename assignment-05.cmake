@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(MY_ADDITIONAL_SOURCES
     # Please add your source files here
+    rt/lights/projectivelight.cpp
     rt/materials/dummy.cpp
     rt/lights/directional.cpp
     rt/lights/pointlight.cpp

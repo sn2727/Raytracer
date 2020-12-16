@@ -10,6 +10,7 @@ class DirectionalLight : public Light {
 public:
 	Vector direction;
 	RGBColor color;
+	Vector normal;
 	DirectionalLight() {}
 	DirectionalLight(const Vector& direction, const RGBColor& color);
 	virtual LightHit getLightHit(const Point& p) const;

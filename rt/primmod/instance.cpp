@@ -85,6 +85,7 @@ Intersection Instance::intersect(const Ray& ray, float previousBestDistance) con
     for (Matrix m : TMatrices) {
         normal = m * normal;        
     }
+    normal = normal.normalize();
     return Intersection(intsec.distance , ray, intsec.solid, normal, ray.getPoint(intsec.distance));
 }
 
