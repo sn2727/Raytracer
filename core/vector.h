@@ -45,7 +45,7 @@ Point operator + (const Point& a, const Vector& b);
 Point operator + (const Vector& a, const Point& b);
 Point operator - (const Point& a, const Vector& b);
 Point operator * (const Float4& scale, const Point& p);
-
+Vector reflect(Vector in, Vector normal);
 }
 
 #endif

@@ -3,6 +3,9 @@
 
 #include <core/vector.h>
 #include <core/color.h>
+#include <rt/textures/texture.h>
+#include <core/vector.h>
+#include <core/scalar.h>
 
 namespace rt {
 

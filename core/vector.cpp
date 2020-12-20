@@ -92,6 +92,10 @@ Point operator + (const Point& a, const Vector& b) {
     return Point(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
+Vector reflect(Vector in, Vector normal) {
+    return 2*dot(normal, in)*normal - in;
+}
+
 Point operator + (const Vector& a, const Point& b) {
     return Point(a.x + b.x, a.y + b.y, a.z + b.z);
 }

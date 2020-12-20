@@ -1,18 +1,19 @@
 #include <rt/materials/lambertian.h>
-
+ 
 namespace rt {
 
 LambertianMaterial::LambertianMaterial(Texture* emission, Texture* diffuse)
 {
-    /* TODO */
+    this -> emission = emission;
+    this -> diffuse = diffuse;
 }
 
 RGBColor LambertianMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return ((1/pi)*diffuse->getColor(texPoint) * dot(inDir, normal)).clamp();
 }
 
 RGBColor LambertianMaterial::getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return (emission->getColor(texPoint)).clamp();
 }
 
 Material::SampleReflectance LambertianMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {

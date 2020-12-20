@@ -2,6 +2,8 @@
 #define CG1RAYTRACER_MATERIALS_COMBINE_HEADER
 
 #include <rt/materials/material.h>
+#include <vector>
+#include <tuple>
 
 namespace rt {
 
@@ -13,6 +15,7 @@ public:
     virtual RGBColor getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual SampleReflectance getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual Sampling useSampling() const;
+    std::vector<std::pair<Material*, float>> materials;
 };
 
 }

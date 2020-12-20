@@ -2,6 +2,8 @@
 #define CG1RAYTRACER_MATERIALS_LAMBERTIAN_HEADER
 
 #include <rt/materials/material.h>
+#include <rt/textures/texture.h>
+#include <core/scalar.h>
 
 namespace rt {
 
@@ -14,6 +16,8 @@ public:
     virtual RGBColor getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual SampleReflectance getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual Sampling useSampling() const;
+    Texture* emission;
+    Texture* diffuse;
 };
 
 }
