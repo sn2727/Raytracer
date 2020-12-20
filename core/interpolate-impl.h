@@ -4,12 +4,12 @@ namespace rt {
 
 template <typename T>
 T lerp(const T& px0, const T& px1, float xPoint) {
-    return Float4(px0) + xPoint*(Float4(px1) - Float4(px0));
+    return px0 + xPoint*(px1 - px0);
 }
 
 template <typename T>
 T lerpbar(const T& a, const T& b, const T& c, float aWeight, float bWeight) {
-    return Float4(aWeight*Float4(a) + bWeight*Float4(b) + (1-aWeight-bWeight)*Float4(c));
+    return aWeight*a + bWeight*b + (1-aWeight-bWeight)*c;
 }
 
 template <typename T>
