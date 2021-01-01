@@ -16,7 +16,7 @@ public:
 
     Point() = default;
     Point(float x, float y, float z);
-    Point::Point(RGBColor c);
+    Point(RGBColor c);
     explicit Point(const Float4& f4);
 
     static Point rep(float v) { return Point(v,v,v); }
