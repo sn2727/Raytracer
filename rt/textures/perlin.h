@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_TEXTURES_PERLIN_HEADER
 
 #include <rt/textures/texture.h>
+#include <core/scalar.h>
 
 namespace rt {
 
@@ -12,6 +13,12 @@ public:
     virtual RGBColor getColor(const Point& coord);
     virtual RGBColor getColorDX(const Point& coord);
     virtual RGBColor getColorDY(const Point& coord);
+    RGBColor PerlinTexture::getBlankColor(const Point& coord);
+    RGBColor white;
+    RGBColor black;
+    float frequency;
+    float octaves;
+    float amplitude;
 };
 
 }

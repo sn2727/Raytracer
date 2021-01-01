@@ -10,6 +10,9 @@ public:
     TriangleMapper(const Point& tv0, const Point& tv1, const Point& tv2);
     TriangleMapper(Point ntv[3]);
     virtual Point getCoords(const Intersection& hit) const;
+    Point p0;
+    Point p1;
+    Point p2;
 };
 
 }

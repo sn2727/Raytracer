@@ -2,6 +2,8 @@
 #define CG1RAYTRACER_MATERIALS_FUZZYMIRROR_HEADER
 
 #include <rt/materials/material.h>
+#include <rt/solids/solid.h>
+#include <rt/solids/disc.h>
 
 namespace rt {
 
@@ -12,6 +14,11 @@ public:
     virtual RGBColor getEmission(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual SampleReflectance getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const;
     virtual Sampling useSampling() const;
+    float eta;
+    float kappa; 
+    float fuzzyangle;
+    float kappasqr;
+    float etasqr;
 };
 
 }

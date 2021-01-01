@@ -3,10 +3,11 @@
 namespace rt {
 
 RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
-    int recDepth = 7;
     RGBColor radiance = RGBColor::rep(0);
     Intersection intsec = world -> scene -> intersect(ray);
     if (!intsec) return radiance;
+    Point texPoint = intsec.solid->texMapper->getCoords(intsec);
+    //Point texPoint = intsec.hitPoint();
     Material* material = intsec.solid->material;
     Vector outDir(-intsec.ray.d);
     outDir = outDir.normalize();
@@ -25,17 +26,26 @@ RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
             Vector inDir(shadowRay.d);
             radiance = radiance +
                     lightsource->getIntensity(lighthit) *
-                    material->getReflectance(hit, normal, outDir, inDir.normalize());
+                    material->getReflectance(texPoint, normal, outDir, inDir.normalize());
         }
     }
     if (material -> useSampling() == Material::SAMPLING_ALL ||
         material -> useSampling() == Material::SAMPLING_SECONDARY) {
-        Material::SampleReflectance sample = material->getSampleReflectance(hit, normal, outDir);
+        Material::SampleReflectance sample = material->getSampleReflectance(texPoint, normal, outDir);
         Ray secondary(hit, reflect(outDir, normal));
-        radiance = getRadiance(secondary) * sample.reflectance;
+        radiance = getRecursiveRadiance(secondary) * sample.reflectance;
+        recDepth = REC_DEPTH;
     }
- 
-    return (radiance + material->getEmission(hit, normal, outDir)).clamp();
+    return (radiance + material->getEmission(texPoint, normal, outDir));
+}
+
+RGBColor RecursiveRayTracingIntegrator::getRecursiveRadiance(const Ray& ray) const {
+    recDepth--;
+    if (recDepth == 0) {
+        recDepth = REC_DEPTH;
+        return RGBColor::rep(1);
+    }
+    return getRadiance(ray);
 }
 
 }

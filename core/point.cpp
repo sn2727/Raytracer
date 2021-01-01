@@ -13,6 +13,13 @@ Point::Point(float x, float y, float z)
     this -> z = z;
 }
 
+Point::Point(RGBColor c) {
+    this -> x = c.r;
+    this -> y = c.g;
+    this -> z = c.b;
+
+}
+
 Point::Point(const Float4& f4)
 {
     if (fabs(f4[3]) < epsilon) {
@@ -28,6 +35,10 @@ Point::Point(const Float4& f4)
 
 Vector Point::operator - (const Point& b) const {
     return Vector(this -> x - b.x, this -> y - b.y, this -> z - b.z);
+}
+
+Point operator+(const Point& a, const Point& b){
+    return Point(a.x+b.x, a.y+b.y, a.z+b.z);
 }
 
 bool Point::operator == (const Point& b) const {

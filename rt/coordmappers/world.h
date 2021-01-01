@@ -12,6 +12,7 @@ public:
     WorldMapper();
     explicit WorldMapper(const Vector& scale);
     virtual Point getCoords(const Intersection& hit) const;
+    Vector scale;
 };
 
 }

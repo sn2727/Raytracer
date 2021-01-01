@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_COORDMAPPERS_COORDMAPPER_HEADER
 
 #include <core/point.h>
+#include <rt/intersection.h>
 
 namespace rt {
 

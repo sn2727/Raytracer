@@ -6,6 +6,9 @@ InfinitePlane::InfinitePlane(const Point& origin, const Vector& normal, CoordMap
 {
     this -> origin = origin;
     this -> normal = normal.normalize();
+    if (texMapper == nullptr) 
+    this -> texMapper = new WorldMapper();
+    else
     this -> texMapper = texMapper;
     this -> material = material;
     
@@ -26,7 +29,7 @@ Intersection InfinitePlane::intersect(const Ray& ray, float previousBestDistance
 }
 
 Solid::Sample InfinitePlane::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return {origin, normal};
 }
 
 float InfinitePlane::getArea() const {

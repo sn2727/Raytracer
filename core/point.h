@@ -3,6 +3,7 @@
 
 #include <core/assert.h>
 #include <core/macros.h>
+#include <core/color.h>
 
 namespace rt {
 
@@ -15,6 +16,7 @@ public:
 
     Point() = default;
     Point(float x, float y, float z);
+    Point::Point(RGBColor c);
     explicit Point(const Float4& f4);
 
     static Point rep(float v) { return Point(v,v,v); }
@@ -28,6 +30,7 @@ public:
 
 Point operator*(float scalar, const Point& b);
 Point operator*(const Point& a, float scalar);
+Point operator+(const Point& a, const Point& b);
 
 Point min(const Point& a, const Point& b);
 Point max(const Point& a, const Point& b);

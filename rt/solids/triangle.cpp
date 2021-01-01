@@ -10,6 +10,9 @@ Triangle::Triangle(Point vertices[3], CoordMapper* texMapper, Material* material
 Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMapper* texMapper, Material* material)
 {   
     this -> material = material;
+    if (texMapper == nullptr) 
+    this -> texMapper = new WorldMapper();
+    else
     this -> texMapper = texMapper;
     this -> v1 = v1;
     this -> v2 = v2;
@@ -40,14 +43,18 @@ Intersection Triangle::intersect(const Ray& ray, float previousBestDistance) con
     if (v < 0.0 || u+v > 1.0f) return Intersection::failure();
     float t = f*dot(edge2, q);
     if (t > epsilon && t < previousBestDistance) {
-        return Intersection(t, ray, this, normal, ray.getPoint(t));
+        return Intersection(t, ray, this, normal, Point(1-u-v, u, v));
     } else return Intersection::failure();
 
 }
 
 
 Solid::Sample Triangle::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    float r1 = random();
+    float r2 = random();
+    float r1root = sqrt(r1);
+    Point p = (1-r1root)*v1 + (r1root*(1-r2))*v2 + (r2*r1root)*v3;
+    return {p, normal};
 }
 
 float Triangle::getArea() const {

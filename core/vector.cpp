@@ -105,7 +105,7 @@ Point operator - (const Point& a, const Vector& b) {
 }
 
 Point operator * (const Float4& scale, const Point& p) {
-    /* TODO */ NOT_IMPLEMENTED;
+   return Point(scale * Float4(p));
 }
 
 }

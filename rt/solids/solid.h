@@ -5,6 +5,8 @@
 #include <core/vector.h>
 #include <rt/primitive.h>
 #include <rt/bbox.h>
+#include <rt/coordmappers/world.h>
+#include <core/random.h>
 
 namespace rt {
 

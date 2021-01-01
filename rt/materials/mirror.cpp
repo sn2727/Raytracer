@@ -12,7 +12,6 @@ MirrorMaterial::MirrorMaterial(float eta, float kappa)
 }
 
 RGBColor MirrorMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
-    //return RGBColor::rep(1.f);
     float costheta = dot(inDir, normal);
     float costhetasqr = costheta*costheta;
     float rp = ((etasqr+kappasqr) * costhetasqr - 2*eta*costheta + 1) /

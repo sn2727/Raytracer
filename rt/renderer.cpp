@@ -9,6 +9,9 @@
 #include <rt/integrators/castingdist.h>
 #include <iostream>
 
+#pragma omp parallel
+#pragma omp for
+
 namespace rt {
 
 Renderer::Renderer(Camera* cam, Integrator* integrator)
@@ -16,18 +19,37 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 {}
 
 void Renderer::render(Image& img) {
-    for (uint w = 0; w < img.width(); w++) {
-        for (uint h = 0; h < img.height(); h++){
+    if (samples <= 1) {
+        for (uint w = 0; w < img.width(); w++) {
+            for (uint h = 0; h < img.height(); h++){
+                // Normalized device coordinates [0, 1]
+                float ndcx = (w + 0.5f) / img.width();
+                float ndcy = (h + 0.5f) / img.height();
 
-            // Normalized device coordinates [0, 1]
-            float ndcx = (w + 0.5f) / img.width();
-            float ndcy = (h + 0.5f) / img.height();
-
-            // Screen space coordinates [-1, 1]
-            float sscx = ndcx * 2 - 1;
-            float sscy = -1*(ndcy * 2 - 1);
+                // Screen space coordinates [-1, 1]
+                float sscx = ndcx * 2 - 1;
+                float sscy = -1*(ndcy * 2 - 1);
     
-            img(w,h) = integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
+                img(w,h) = integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
+            }         
+        }
+    } else {
+        for (uint w = 0; w < img.width(); w++) {
+            for (uint h = 0; h < img.height(); h++){
+                RGBColor radiance = RGBColor::rep(0);
+                for (uint s = 0; s < samples; s++) {
+                    float rand = random();
+                    // Normalized device coordinates [0, 1]
+                    float ndcx = (w + rand) / img.width();
+                    float ndcy = (h + rand) / img.height();
+
+                    // Screen space coordinates [-1, 1]
+                    float sscx = ndcx * 2 - 1;
+                    float sscy = -1*(ndcy * 2 - 1);
+                    radiance = radiance + integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
+                }
+                img(w,h) = radiance / samples;         
+            }    
         }
     }
 }

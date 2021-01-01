@@ -3,17 +3,18 @@
 namespace rt {
 
 Point WorldMapper::getCoords(const Intersection& hit) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Point hitP = hit.local();
+    return Point(hitP.x*scale.x, hitP.y*scale.y, hitP.z*scale.z);
 }
 
 WorldMapper::WorldMapper()
 {
-    /* TODO */
+    this -> scale = Vector(1,1,1);
 }
 
 WorldMapper::WorldMapper(const Vector& scale)
 {
-    /* TODO */
+    this -> scale = scale;
 }
 
 }

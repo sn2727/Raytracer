@@ -7,6 +7,9 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
     this -> origin = origin;
     this -> span1 = span1;
     this -> span2 = span2;
+    if (texMapper == nullptr) 
+    this -> texMapper = new WorldMapper();
+    else
     this -> texMapper = texMapper;
     this -> material = material;
     this -> normal = cross(span1, span2);
@@ -55,12 +58,20 @@ Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
     Vector vp4 = P - Vector(v3.x,v3.y,v3.z); 
     C = cross(edge4, vp4); 
     if (dot(normal, C) < 0)  return Intersection::failure(); // P is on the right side 
- 
-    return Intersection(t, ray, this, normal.normalize(), hit);
+
+    Vector h = cross(ray.d, span1);
+    float a = dot(span2, h);
+    float f = 1.0f/a;
+    Vector s = ray.o - v1;
+    float u = f*dot(s,h);
+    Vector q = cross(s, span2);
+    float v = f*dot(ray.d, q);
+
+    return Intersection(t, ray, this, normal.normalize(), Point(1-u-v,u,v));
 }
 
 Solid::Sample Quad::sample() const {
-    /* TODO */ NOT_IMPLEMENTED;
+    return {origin + random() * span1 + random() * span2, normal};
 }
 
 float Quad::getArea() const {

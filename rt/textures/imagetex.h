@@ -25,6 +25,11 @@ public:
     virtual RGBColor getColor(const Point& coord);
     virtual RGBColor getColorDX(const Point& coord);
     virtual RGBColor getColorDY(const Point& coord);
+    RGBColor nearest(float ndcx, float ndcy);
+    RGBColor bilinear(float ndcx, float ndcy, float z);
+    Image image;
+    BorderHandlingType bht;
+    InterpolationType it;
 };
 
 }

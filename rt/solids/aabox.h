@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_SOLIDS_BOX_HEADER
 
 #include <rt/solids/solid.h>
+#include <rt/solids/quad.h>
 
 namespace rt {
 

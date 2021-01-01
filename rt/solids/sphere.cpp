@@ -6,6 +6,9 @@ Sphere::Sphere(const Point& center, float radius, CoordMapper* texMapper, Materi
 {
     this -> center = center;
     this -> radius = radius;
+    if (texMapper == nullptr) 
+    this -> texMapper = new WorldMapper();
+    else
     this -> texMapper = texMapper;
     this -> material = material;
     this -> radius2 = radius * radius;
@@ -45,7 +48,8 @@ Intersection Sphere::intersect(const Ray& ray, float previousBestDistance) const
 }
 
 Solid::Sample Sphere::sample() const {
-	NOT_IMPLEMENTED;
+	Vector r = Vector(1-2*random(), 1-2*random(), 1-2*random()).normalize();
+    return {Point(r.x*radius, r.y*radius, r.z*radius), Vector(1,0,0)};
 }
 
 float Sphere::getArea() const {

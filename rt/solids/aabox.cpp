@@ -6,6 +6,9 @@ AABox::AABox(const Point& corner1, const Point& corner2, CoordMapper* texMapper,
 {
     this -> corner1 = corner1;
     this -> corner2 = corner2;
+    if (texMapper == nullptr) 
+    this -> texMapper = new WorldMapper();
+    else
     this -> texMapper = texMapper;
     this -> material = material;
 }
@@ -15,7 +18,31 @@ BBox AABox::getBounds() const {
 }
 
 Solid::Sample AABox::sample() const {
-    NOT_IMPLEMENTED;
+    int r = floor(random() * 6);
+    switch (r)
+    {
+    case 0:
+        return Quad(corner1, Point(corner1.x, corner2.y, corner1.z) - corner1, 
+            Point(corner2.x, corner1.y, corner1.z) - corner1, nullptr, nullptr).sample();
+    case 1:
+        return Quad(corner1, Point(corner1.x, corner2.y, corner1.z) - corner1, 
+            Point(corner1.x, corner1.y, corner2.z) - corner1, nullptr, nullptr).sample();
+    case 2:
+        return Quad(corner1, Point(corner1.x, corner1.y, corner2.z) - corner1, 
+            Point(corner2.x, corner1.y, corner1.z) - corner1, nullptr, nullptr).sample();
+    case 3:
+        return Quad(corner2, Point(corner2.x, corner1.y, corner2.z) - corner2, 
+            Point(corner1.x, corner2.y, corner2.z) - corner2, nullptr, nullptr).sample();
+    case 4:
+        return Quad(corner2, Point(corner2.x, corner2.y, corner1.z) - corner2, 
+            Point(corner1.x, corner2.y, corner2.z) - corner2, nullptr, nullptr).sample();
+    case 5:
+        return Quad(corner2, Point(corner2.x, corner1.y, corner2.z) - corner2, 
+            Point(corner1.x, corner2.y, corner2.z) - corner2, nullptr, nullptr).sample();
+    default: 
+        return Quad(corner2, Point(corner2.x, corner1.y, corner2.z) - corner2, 
+            Point(corner2.x, corner2.y, corner2.z) - corner2, nullptr, nullptr).sample();
+    }
 }
 
 float AABox::getArea() const {
