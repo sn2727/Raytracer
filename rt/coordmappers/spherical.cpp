@@ -9,7 +9,7 @@ SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& ze
 }
 
 Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
-   Point hitPoint = hit.local();
+   Point hitPoint = hit.hitPoint();
    float theta = atan2(hitPoint.x, hitPoint.z);
    float radius = (hitPoint - origin).length();
    float phi = acos(hitPoint.y/radius);
