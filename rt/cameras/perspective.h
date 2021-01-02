@@ -2,8 +2,6 @@
 #define CG1RAYTRACER_CAMERAS_PERSPECTIVE_HEADER
 
 #include <rt/cameras/camera.h>
-#include <core/vector.h>
-#include <core/point.h>
 
 namespace rt {
 

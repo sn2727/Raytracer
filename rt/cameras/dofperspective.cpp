@@ -1,5 +1,6 @@
 #include <rt/cameras/dofperspective.h>
 #include <rt/ray.h>
+#include <cmath>
 
 namespace rt {
 
@@ -24,6 +25,7 @@ Ray DOFPerspectiveCamera::getPrimaryRay(float x, float y) const {
     //Point focalPoint = origin + focalDistance * forward;
     Vector direction = focalPoint - origin;
     return Ray(mOrigin + r*apertureRadius, direction.normalize());
+    
 }
 
 }

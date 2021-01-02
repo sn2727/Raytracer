@@ -3,6 +3,8 @@
 
 #include <core/assert.h>
 #include <rt/ray.h>
+#include <core/vector.h>
+#include <core/point.h>
 
 namespace rt {
 
