@@ -3,7 +3,7 @@
 namespace rt {
 
 Point WorldMapper::getCoords(const Intersection& hit) const {
-    Point hitP = hit.local();
+    Point hitP = hit.hitPoint();
     return Point(hitP.x*scale.x, hitP.y*scale.y, hitP.z*scale.z);
 }
 
