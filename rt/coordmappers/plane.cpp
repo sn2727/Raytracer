@@ -8,7 +8,7 @@ PlaneCoordMapper::PlaneCoordMapper(const Vector& e1, const Vector& e2) {
 }
 
 Point PlaneCoordMapper::getCoords(const Intersection& hit) const {
-    Point hitP(hit.hitPoint());
+    Point hitP(hit.local());
     float u = dot(e1, Vector(hitP.x, hitP.y, hitP.z));
     float v = dot(e1, Vector(hitP.x, hitP.y, hitP.z));
     return Point(u, v, e1.z);

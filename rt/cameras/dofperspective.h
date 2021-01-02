@@ -2,6 +2,7 @@
 #define CG1RAYTRACER_CAMERAS_DOFPERSPECTIVE_HEADER
 
 #include <rt/cameras/camera.h>
+#include <core/random.h>
 
 namespace rt {
 
@@ -21,6 +22,14 @@ public:
     );
 
     virtual Ray getPrimaryRay(float x, float y) const;
+    Point mOrigin;
+    Vector mBaseX;
+    Vector mBaseY;
+    Vector mBaseZ;
+    float apertureRadius;
+    float focalDistance;
+    Vector forward;
+    Point focalPoint;
 };
 
 }
