@@ -42,7 +42,7 @@ Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& tex
 }
 
 Material::Sampling GlassMaterial::useSampling() const {
-    return SAMPLING_SECONDARY;
+    return SAMPLING_ALL;
 }
 
 }
