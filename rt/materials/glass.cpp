@@ -37,7 +37,17 @@ RGBColor GlassMaterial::getEmission(const Point& texPoint, const Vector& normal,
 }
 
 Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
+    Vector N = normal;
+    Vector I = -outDir;
+    float cosi = clamp(-1, 1, dot(I, N)); 
+    float etai = 1, etat = eta; 
+    Vector n = N; 
+    if (cosi < 0) { cosi = -cosi; } else { std::swap(etai, etat); n= -N; } 
+    float eta = etai / etat; 
+    float k = 1 - eta * eta * (1 - cosi * cosi); 
     Vector in = reflect(outDir, normal);
+    if (k >= 0)    
+        in = eta * I + (eta * cosi - sqrtf(k)) * n;
     return SampleReflectance{in, getReflectance(texPoint, normal, outDir, in)};
 }
 

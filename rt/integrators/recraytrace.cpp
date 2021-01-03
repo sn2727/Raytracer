@@ -32,7 +32,7 @@ RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
     if (material -> useSampling() == Material::SAMPLING_ALL ||
         material -> useSampling() == Material::SAMPLING_SECONDARY) {
         Material::SampleReflectance sample = material->getSampleReflectance(texPoint, normal, outDir);
-        Ray secondary(hit, reflect(outDir, normal));
+        Ray secondary(hit, sample.direction);
         radiance = getRecursiveRadiance(secondary) * sample.reflectance;
         recDepth = REC_DEPTH;
     }
