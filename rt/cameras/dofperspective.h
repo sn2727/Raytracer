@@ -29,7 +29,6 @@ public:
     float apertureRadius;
     float focalDistance;
     Vector forward;
-    Point focalPoint;
 };
 
 }

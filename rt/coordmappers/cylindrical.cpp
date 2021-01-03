@@ -4,11 +4,14 @@ namespace rt {
 
 CylindricalCoordMapper::CylindricalCoordMapper(const Point& origin, const Vector& longitudinalAxis, const Vector& polarAxis)
 {
-    /* TODO */
+    this -> longitudinalAxis = longitudinalAxis;
+    this -> polarAxis = polarAxis;
 }
 
 Point CylindricalCoordMapper::getCoords(const Intersection& hit) const {
-    /* TODO */ NOT_IMPLEMENTED;
+    Point hitP(hit.local());
+    Vector v(hitP.x * polarAxis + hitP.y*longitudinalAxis);
+    return Point(v.x, v.y, v.z);
 }
 
 }

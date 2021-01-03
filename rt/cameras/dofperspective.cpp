@@ -16,15 +16,14 @@ DOFPerspectiveCamera::DOFPerspectiveCamera(const Point& center, const Vector& fo
     this -> apertureRadius = apertureRadius;
     this -> focalDistance = focalDistance;
     this -> forward = forward;
-    this -> focalPoint = center + focalDistance * forward;
 }
 
 Ray DOFPerspectiveCamera::getPrimaryRay(float x, float y) const {
     Vector r(0.5f - random(), 0.5f - random(), 0.5f - random());
     Point origin = mOrigin + r*apertureRadius;
-    //Point focalPoint = origin + focalDistance * forward;
+    Point focalPoint = mOrigin + focalDistance * forward;
     Vector direction = focalPoint - origin;
-    return Ray(mOrigin + r*apertureRadius, direction.normalize());
+    return Ray(origin, direction.normalize());
     
 }
 
