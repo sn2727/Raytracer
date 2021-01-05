@@ -71,7 +71,8 @@ Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
 }
 
 Solid::Sample Quad::sample() const {
-    return {origin + random() * span1 + random() * span2, normal};
+    //return {origin + random() * span1 + random() * span2, normal};
+    return {origin, normal};
 }
 
 float Quad::getArea() const {

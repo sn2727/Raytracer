@@ -16,7 +16,7 @@ RGBColor GlassMaterial::getReflectance(const Point& texPoint, const Vector& norm
     if (cosi > 0) std::swap(etai, etat);
     float sint =  etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
     if (sint >= 1) {
-        kr = 1;
+        kr = 0;
     } else {
         float cost = sqrtf(std::max(0.f, 1 - sint * sint)); 
         cosi = fabsf(cosi); 
@@ -46,8 +46,10 @@ Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& tex
     float eta = etai / etat; 
     float k = 1 - eta * eta * (1 - cosi * cosi); 
     Vector in = reflect(outDir, normal);
-    if (k >= 0)    
+    if (k >= 0) {
         in = eta * I + (eta * cosi - sqrtf(k)) * n;
+        return SampleReflectance{in, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, in)};
+        }
     return SampleReflectance{in, getReflectance(texPoint, normal, outDir, in)};
 }
 
