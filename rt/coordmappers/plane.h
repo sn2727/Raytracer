@@ -3,6 +3,7 @@
 
 #include <rt/coordmappers/coordmapper.h>
 #include <core/vector.h>
+#include <rt/solids/infiniteplane.h>
 
 namespace rt {
 
@@ -15,6 +16,8 @@ public:
     virtual Point getCoords(const Intersection& hit) const;
     Vector e1;
     Vector e2;
+    InfinitePlane plane;
+    Vector normal;
 };
 
 }

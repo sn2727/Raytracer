@@ -24,13 +24,13 @@ LightHit SpotLight::getLightHit(const Point& p) const {
 }
 
 RGBColor SpotLight::getIntensity(const LightHit& irr) const {
-  
+    float cos = dot(-irr.direction, direction);
     if (fabs(irr.distance) < epsilon) return intensity;
     float ang = -dot(direction.normalize(), irr.direction.normalize());
     if (acos(ang) >= angle) {
         return RGBColor::rep(0);
     }
-    return intensity * (power * acos(ang));
+    return (intensity/(irr.distance*irr.distance)) * std::pow(cos, power);
 }
 
 }
