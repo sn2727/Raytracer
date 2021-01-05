@@ -18,7 +18,7 @@ RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
         material->useSampling() == Material::SAMPLING_SECONDARY) {
         for (Light* lightsource : world->light) {
             LightHit lighthit = lightsource->getLightHit(hit);
-            Ray shadowRay(hit, lighthit.direction);
+            Ray shadowRay(hit+BIAS*lighthit.direction, lighthit.direction);
             Intersection shadowIntsec = world -> scene -> intersect(shadowRay);
             if (shadowIntsec && shadowIntsec.distance < lighthit.distance && shadowIntsec.distance > BIAS) {
                 continue;
@@ -32,7 +32,7 @@ RGBColor RecursiveRayTracingIntegrator::getRadiance(const Ray& ray) const {
     if (material -> useSampling() == Material::SAMPLING_ALL ||
         material -> useSampling() == Material::SAMPLING_SECONDARY) {
         Material::SampleReflectance sample = material->getSampleReflectance(texPoint, normal, outDir);
-        Ray secondary(hit, sample.direction);
+        Ray secondary(hit+BIAS*sample.direction, sample.direction);
         radiance = getRecursiveRadiance(secondary) * sample.reflectance;
         recDepth = REC_DEPTH;
     }

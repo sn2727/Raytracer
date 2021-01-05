@@ -10,7 +10,6 @@ DOFPerspectiveCamera::DOFPerspectiveCamera(const Point& center, const Vector& fo
     this -> mBaseZ = forward.normalize();
     Vector right_axis = cross(mBaseZ, up).normalize();
     Vector up_axis = cross(right_axis, mBaseZ);
-
     this -> mBaseX = right_axis * std::tan(horizontalOpeningAngle / 2.f);
     this -> mBaseY = up_axis * std::tan(verticalOpeningAngle / 2.f);
     this -> apertureRadius = apertureRadius;
@@ -19,12 +18,13 @@ DOFPerspectiveCamera::DOFPerspectiveCamera(const Point& center, const Vector& fo
 }
 
 Ray DOFPerspectiveCamera::getPrimaryRay(float x, float y) const {
-    Vector r(0.5f - random(), 0.5f - random(), 0.5f - random());
-    Point origin = mOrigin + r*apertureRadius;
-    Point focalPoint = mOrigin + focalDistance * forward;
-    Vector direction = focalPoint - origin;
-    return Ray(origin, direction.normalize());
-    
+    Vector perspectiveDir = (mBaseZ + mBaseX*x + mBaseY*y).normalize();
+    Point focalPoint = mOrigin + focalDistance*perspectiveDir;
+    float r1 = 0.5f - random();
+    float r2 = 0.5f - random();
+    Point randOrigin(mOrigin.x + r1*apertureRadius, mOrigin.y + r2*apertureRadius, mOrigin.z);
+    Vector dir = (focalPoint - randOrigin).normalize();
+    return Ray(randOrigin, dir);
 }
 
 }

@@ -6,6 +6,7 @@
 #include <rt/textures/texture.h>
 #include <core/vector.h>
 #include <core/scalar.h>
+#include <core/random.h>
 
 namespace rt {
 
