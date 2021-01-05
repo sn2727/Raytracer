@@ -25,6 +25,7 @@ public:
     Vector normal;
     float area;
     InfinitePlane plane;
+    Vector nnormal;
 };
 
 }

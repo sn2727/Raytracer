@@ -18,6 +18,7 @@ Quad::Quad(const Point& origin, const Vector& span1, const Vector& span2, CoordM
     this -> v1 = origin + span1;
     this -> v2 = v1 + span2;
     this -> v3 = origin + span2;
+    this -> nnormal = normal.normalize();
 }
 
 BBox Quad::getBounds() const {
@@ -67,12 +68,11 @@ Intersection Quad::intersect(const Ray& ray, float previousBestDistance) const {
     Vector q = cross(s, span2);
     float v = f*dot(ray.d, q);
 
-    return Intersection(t, ray, this, normal.normalize(), Point(1-u-v,u,v));
+    return Intersection(t, ray, this, nnormal, Point(1-u-v,u,v));
 }
 
 Solid::Sample Quad::sample() const {
-    //return {origin + random() * span1 + random() * span2, normal};
-    return {origin, normal};
+    return {origin + random() * span1 + random() * span2, nnormal};
 }
 
 float Quad::getArea() const {

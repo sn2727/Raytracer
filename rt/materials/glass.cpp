@@ -43,10 +43,14 @@ Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& tex
     float etai = 1, etat = eta; 
     Vector n = N; 
     if (cosi < 0) { cosi = -cosi; } else { std::swap(etai, etat); n= -N; } 
+    float sint =  etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
     float eta = etai / etat; 
     float k = 1 - eta * eta * (1 - cosi * cosi); 
     Vector in = reflect(outDir, normal);
-    if (k >= 0) {
+    if (sint >= 1) {
+        return SampleReflectance{in, RGBColor::rep(1.f)};
+    }
+    if (k >= 0 && sint >= 1) {
         in = eta * I + (eta * cosi - sqrtf(k)) * n;
         return SampleReflectance{in, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, in)};
         }
