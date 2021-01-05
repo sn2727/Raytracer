@@ -10,7 +10,7 @@ PlaneCoordMapper::PlaneCoordMapper(const Vector& e1, const Vector& e2) {
 }
 
 Point PlaneCoordMapper::getCoords(const Intersection& hit) const {
-    Point hitP(hit.hitPoint());
+    Point hitP(hit.local());
     Intersection intsec1 = plane.intersect(Ray(hitP, -normal));
     Intersection intsec2 = plane.intersect(Ray(hitP, normal));
     if (intsec1) return intsec1.hitPoint();

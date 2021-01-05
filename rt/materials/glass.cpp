@@ -37,7 +37,7 @@ RGBColor GlassMaterial::getEmission(const Point& texPoint, const Vector& normal,
 }
 
 Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
-    Vector N = normal;
+    /*Vector N = normal;
     Vector I = -outDir;
     float cosi = clamp(-1, 1, dot(I, N)); 
     float etai = 1, etat = eta; 
@@ -54,7 +54,25 @@ Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& tex
         in = eta * I + (eta * cosi - sqrtf(k)) * n;
         return SampleReflectance{in, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, in)};
         }
-    return SampleReflectance{in, getReflectance(texPoint, normal, outDir, in)};
+    return SampleReflectance{in, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, in)};
+    */
+   float r = random();
+   if (r<= 0.5f) { //reflect
+        Vector in = reflect(outDir, normal);
+        return SampleReflectance{in, getReflectance(texPoint, normal, outDir, in)};
+   }
+    Vector N = normal;
+    Vector I = -outDir;
+    float cosi = clamp(-1, 1, dot(I, N)); 
+    float etai = 1, etat = eta; 
+    Vector n = N; 
+    if (cosi < 0) { cosi = -cosi; } else { std::swap(etai, etat); n= -N; } 
+    float sint =  etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
+    float eta = etai / etat; 
+    float k = 1 - eta * eta * (1 - cosi * cosi); 
+    Vector inREFR = eta * I + (eta * cosi - sqrtf(k)) * n;
+    return SampleReflectance{inREFR, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, inREFR)};
+
 }
 
 Material::Sampling GlassMaterial::useSampling() const {
