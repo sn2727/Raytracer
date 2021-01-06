@@ -27,7 +27,7 @@ RGBColor FuzzyMirrorMaterial::getEmission(const Point& texPoint, const Vector& n
 
 Material::SampleReflectance FuzzyMirrorMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
     Vector in = reflect(outDir, normal);
-    Disc disc(texPoint+in, in, fuzzyangle, nullptr, nullptr);
+    Disc disc(texPoint+in, in, cos(fuzzyangle), nullptr, nullptr);
     Solid::Sample per = disc.sample();
     Vector perturbedIn = per.point - texPoint;
     return SampleReflectance{in, getReflectance(texPoint, normal, outDir, perturbedIn)};

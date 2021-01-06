@@ -3,6 +3,7 @@
 
 #include <rt/cameras/camera.h>
 #include <core/random.h>
+#include <rt/solids/disc.h>
 
 namespace rt {
 
@@ -29,6 +30,7 @@ public:
     float apertureRadius;
     float focalDistance;
     Vector forward;
+    Vector normal;
 };
 
 }

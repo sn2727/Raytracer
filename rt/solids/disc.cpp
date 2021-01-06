@@ -53,7 +53,7 @@ Solid::Sample Disc::sample() const {
     while (outside) {
         float r1 = 1-2*random();
         float r2 = 1-2*random();
-        sample = center + r1*u + r1*v; 
+        sample = center + r1*u + r2*v; 
         outside = (sample - center).length() > radius;
     }
     return {sample, normal};

@@ -15,14 +15,13 @@ DOFPerspectiveCamera::DOFPerspectiveCamera(const Point& center, const Vector& fo
     this -> apertureRadius = apertureRadius;
     this -> focalDistance = focalDistance;
     this -> forward = forward;
+    this -> normal = cross(mBaseX, mBaseY).normalize();
 }
 
 Ray DOFPerspectiveCamera::getPrimaryRay(float x, float y) const {
     Vector perspectiveDir = (mBaseZ + mBaseX*x + mBaseY*y).normalize();
     Point focalPoint = mOrigin + focalDistance*perspectiveDir;
-    float r1 = 0.5f - random();
-    float r2 = 0.5f - random();
-    Point randOrigin(mOrigin.x + r1*apertureRadius, mOrigin.y + r2*apertureRadius, mOrigin.z);
+    Point randOrigin = Disc(mOrigin, normal, apertureRadius, nullptr, nullptr).sample().point;
     Vector dir = (focalPoint - randOrigin).normalize();
     return Ray(randOrigin, dir);
 }
