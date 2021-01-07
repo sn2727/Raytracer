@@ -27,6 +27,7 @@ public:
     virtual RGBColor getColorDY(const Point& coord);
     RGBColor nearest(float ndcx, float ndcy);
     RGBColor bilinear(float ndcx, float ndcy, float z);
+    Point format(Point p, float width, float height);
     Image image;
     BorderHandlingType bht;
     InterpolationType it;

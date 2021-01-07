@@ -12,15 +12,14 @@ ImageTexture::ImageTexture()
 
 ImageTexture::ImageTexture(const std::string& filename, BorderHandlingType bh, InterpolationType i)
 {
-    this -> image = Image();
-    image.readPNG(filename);
+    image.readPNG("C:/Users/tsz/raytracer/"+filename);
     this -> bht = bh;
     this -> it = i;
 }
 
 ImageTexture::ImageTexture(const Image& image, BorderHandlingType bh, InterpolationType i)
 {
-    this -> image = image;
+    this -> image = Image(image);
     this -> bht = bh;
     this -> it = i;
 }
@@ -37,9 +36,9 @@ RGBColor ImageTexture::getColor(const Point& coord) {
         if (ndcx < 0) tu = 0; else if (ndcx > 1) tu = 1; else tu = ndcx;
         if (ndcy < 0) tv = 0; else if (ndcy > 1) tv = 1; else tv = ndcy;
         if (it == NEAREST) {
-            return nearest(ndcx, ndcy); 
+            return nearest(tu, tv); 
         } else {
-            return bilinear(ndcx, ndcy, coord.z);
+            return bilinear(tu, tv, coord.z);
         }
         break;
 
@@ -95,7 +94,9 @@ RGBColor ImageTexture::getColor(const Point& coord) {
 }
 
 RGBColor ImageTexture::nearest(float ndcx, float ndcy) {
-    return image(round(ndcx*image.width()), round(ndcy*image.height()));
+    Point p(round(ndcx*image.width()), round(ndcy*image.height()), 0);
+    p = format(p, image.width(), image.height());
+    return image(p.x, p.y);
 }
 
 RGBColor ImageTexture::bilinear(float ndcx, float ndcy, float z) {
@@ -105,11 +106,22 @@ RGBColor ImageTexture::bilinear(float ndcx, float ndcy, float z) {
     Point x1y0(ceil(ndcx*width), floor(ndcy*height), z);
     Point x0y1(floor(ndcx*width), ceil(ndcy*height), z);
     Point x1y1(ceil(ndcx*width), ceil(ndcy*height), z);
+    x0y0 = format(x0y0, width, height);
+    x1y0 = format(x1y0, width, height);
+    x0y1 = format(x0y1, width, height);
+    x1y1 = format(x1y1, width, height);
     float xWeight = ndcx*width - x0y0.x;
-    float yWeight = ndcy*height - x0y0.x;
-    Point value = lerp2d(x0y0, x1y0, x0y1, x1y1, xWeight, yWeight);
-    return image(value.x*image.width(), value.y*image.height());
+    float yWeight = ndcy*height - x0y0.y;
+    RGBColor value = lerp2d(image(x0y0.x, x0y0.y), image(x1y0.x, x1y0.y), image(x0y1.x, x0y1.y), image(x1y1.x, x1y1.y), xWeight, yWeight);
+    return value;
 }
+
+Point ImageTexture::format(Point p, float width, float height) {
+    Point value = p;
+    if (p.x >= width) value.x--;
+    if (p.y >= height) value.y--;
+    return value;
+} 
 
 RGBColor ImageTexture::getColorDX(const Point& coord) {
     /* TODO */ NOT_IMPLEMENTED;
