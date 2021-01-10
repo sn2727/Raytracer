@@ -9,22 +9,20 @@ GlassMaterial::GlassMaterial(float eta)
 
 RGBColor GlassMaterial::getReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir, const Vector& inDir) const {
 
-    float kr = 1;
-    float cosi = clamp(-1.f, 1.f, dot(inDir, normal));
+    float cosi = clamp(-1.f, 1.f, dot(-inDir, normal));
     float etai = 1;
     float etat = eta;
     if (cosi > 0) std::swap(etai, etat);
     float sint =  etai / etat * sqrtf(std::max(0.f, 1 - cosi * cosi));
     if (sint >= 1) {
-        kr = 0;
+        return RGBColor::rep(1.f);
     } else {
         float cost = sqrtf(std::max(0.f, 1 - sint * sint)); 
         cosi = fabsf(cosi); 
         float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost)); 
         float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost)); 
-        kr = (Rs * Rs + Rp * Rp) / 2; 
+        return RGBColor::rep((Rs * Rs + Rp * Rp) / 2); 
     }
-    return RGBColor::rep(kr);
 }
 
 float GlassMaterial::clamp(float lo, float hi, float v) const {
@@ -37,6 +35,7 @@ RGBColor GlassMaterial::getEmission(const Point& texPoint, const Vector& normal,
 }
 
 Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& texPoint, const Vector& normal, const Vector& outDir) const {
+    Vector reflected = reflect(outDir, normal);
     Vector N = normal;
     Vector I = -outDir;
     float cosi = clamp(-1, 1, dot(I, N)); 
@@ -45,12 +44,12 @@ Material::SampleReflectance GlassMaterial::getSampleReflectance(const Point& tex
     if (cosi < 0) { cosi = -cosi; } else { std::swap(etai, etat); n= -N; } 
     float eta = etai / etat; 
     float k = 1 - eta * eta * (1 - cosi * cosi); 
-    Vector in = reflect(outDir, normal);
     if (k >= 0) {
-        in = eta * I + (eta * cosi - sqrtf(k)) * n;
-        return SampleReflectance{in, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, in)};
+        Vector refracted = eta * I + (eta * cosi - sqrtf(k)) * n;
+        return SampleReflectance{refracted, RGBColor::rep(1.f)-getReflectance(texPoint, normal, outDir, refracted)};
         }
-    return SampleReflectance{in, getReflectance(texPoint, normal, outDir, in)};
+    return SampleReflectance{reflected, getReflectance(texPoint, normal, outDir, reflected)}; 
+
 }
 
 Material::Sampling GlassMaterial::useSampling() const {
