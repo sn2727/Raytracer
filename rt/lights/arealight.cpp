@@ -5,23 +5,16 @@
 namespace rt {
 
 LightHit AreaLight::getLightHit(const Point& p) const {
-    Vector dir = source->sample().point - p;
+    Solid::Sample s = source->sample();
+    Vector dir = s.point - p;
     float distance = dir.length();
-    if (fabs(distance) < epsilon) {
-        return LightHit{dir, distance, Vector(0,0,0)};
-    }
-    return {dir, distance, dir.normalize()};
+    return {dir, distance, s.normal};
 }
 
 RGBColor AreaLight::getIntensity(const LightHit& irr) const {
-    RGBColor color = RGBColor::rep(0);
     Solid::Sample s = source->sample();
-    return source -> material -> getEmission(s.point, s.normal, Vector(1,0,0));
-    /*for (int i = 0; i<SAMPLES; i++) {
-        Solid::Sample s = source->sample();
-        color = color + source->material->getEmission(s.point, s.normal, Vector(1,0,0));
-    }
-    return color/SAMPLES;*/
+    RGBColor c = source->material->getEmission(s.point, s.normal, Vector(1,0,0));
+    return c.clamp();
 }
 
 AreaLight::AreaLight(Solid* source)
