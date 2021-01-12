@@ -13,6 +13,7 @@ public:
     virtual Point getCoords(const Intersection& hit) const;
     Vector longitudinalAxis;
     Vector polarAxis; 
+    Point origin;
 };
 
 }

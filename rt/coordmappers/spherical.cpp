@@ -6,17 +6,20 @@ namespace rt {
 SphericalCoordMapper::SphericalCoordMapper(const Point& origin, const Vector& zenith, const Vector& azimuthRef)
 {
     this -> origin = origin;
+    this -> azimuthRef = azimuthRef;
+    this -> zenith = zenith;
 }
 
 Point SphericalCoordMapper::getCoords(const Intersection& hit) const {
-   Point hitPoint = hit.hitPoint();
-   float theta = atan2(hitPoint.x, hitPoint.z);
-   float radius = (hitPoint - origin).length();
-   float phi = acos(hitPoint.y/radius);
-   float thetaU = theta/(2*pi);
-   float u = 1 - (thetaU + 0.5f);
-   float v = 1 - phi/pi;
-   return Point(u, v, hitPoint.z);
+    Point hitP = hit.local();
+    
+    //convert cartesian coordinates into spherical
+    float r2 = hitP.x*hitP.x + hitP.y*hitP.y + hitP.z*hitP.z;
+    float r = sqrt(r2);
+    float theta = atan(hitP.y/hitP.x);
+    float phi = acos(hitP.z/r);
+
+    return Point(r*azimuthRef.length(), theta*zenith.length(), phi);
 }
 
 }

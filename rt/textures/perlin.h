@@ -13,7 +13,7 @@ public:
     virtual RGBColor getColor(const Point& coord);
     virtual RGBColor getColorDX(const Point& coord);
     virtual RGBColor getColorDY(const Point& coord);
-    RGBColor getBlankColor(const Point& coord);
+    RGBColor getBlankColor(int x, int y, int z);
     RGBColor white;
     RGBColor black;
     float frequency;

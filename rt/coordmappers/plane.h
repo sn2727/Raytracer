@@ -16,8 +16,8 @@ public:
     virtual Point getCoords(const Intersection& hit) const;
     Vector e1;
     Vector e2;
-    InfinitePlane plane;
     Vector normal;
+    Point origin;
 };
 
 }

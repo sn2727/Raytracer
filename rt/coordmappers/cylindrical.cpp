@@ -6,12 +6,18 @@ CylindricalCoordMapper::CylindricalCoordMapper(const Point& origin, const Vector
 {
     this -> longitudinalAxis = longitudinalAxis;
     this -> polarAxis = polarAxis;
+    this -> origin = origin;
 }
 
 Point CylindricalCoordMapper::getCoords(const Intersection& hit) const {
     Point hitP(hit.local());
-    Vector v(hitP.x * polarAxis + hitP.y*longitudinalAxis);
-    return Point(v.x, v.y, v.z);
+
+    //transform the cartesian coordinates into cylindrical
+    float r2 = hitP.x*hitP.x + hitP.y*hitP.y;
+    float theta = atan(hitP.y/hitP.x);
+    float z = hitP.z;
+
+    return Point(sqrt(r2)*polarAxis.length(), theta*longitudinalAxis.length(), z);
 }
 
 }
