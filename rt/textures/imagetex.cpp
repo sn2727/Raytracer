@@ -12,7 +12,7 @@ ImageTexture::ImageTexture()
 
 ImageTexture::ImageTexture(const std::string& filename, BorderHandlingType bh, InterpolationType i)
 {
-    image.readPNG("C:/Users/tsz/raytracer/"+filename);
+    image.readPNG("../../"+filename);
     this -> bht = bh;
     this -> it = i;
 }
