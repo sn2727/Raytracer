@@ -21,6 +21,7 @@ Triangle::Triangle(const Point& v1, const Point& v2, const Point& v3, CoordMappe
     this -> edge2 = v3 - v1; 
     this -> normal = cross(edge1,edge2);
     this -> area = 0.5f * normal.length();
+    if (normal.length() > epsilon)
     this -> normal = this -> normal.normalize();
 }
 
