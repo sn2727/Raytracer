@@ -23,18 +23,18 @@ BBox BumpMapper::getBounds() const {
 Intersection BumpMapper::intersect(const Ray& ray, float previousBestDistance) const {
     Intersection intsec = base -> intersect(ray, previousBestDistance);
     if (!intsec) return Intersection::failure();
-    Point texPoint2 = coordMapper->getCoords(intsec);
     Point texPoint = intsec.local();
     Vector normal = base->normal;
     float u = texPoint.x;
     float v = texPoint.y;
     Vector dx(bumpmap->getColorDX(texPoint).r, bumpmap->getColorDX(texPoint).g, bumpmap->getColorDX(texPoint).b);
     Vector dy(bumpmap->getColorDY(texPoint).r, bumpmap->getColorDY(texPoint).g, bumpmap->getColorDY(texPoint).b);
-    Vector Ov = bv1*v - texPoint;
-    Vector Ou = bv2*u - texPoint;
-    Vector OvN = cross(normal, Vector(Ov.x, Ov.y, Ov.z));
-    Vector OuN = cross(normal, Vector(Ou.x, Ou.y, Ou.z));
-    Vector checkNormal = cross(Vector(Ou.x, Ou.y, Ou.z), Vector(Ov.x, Ov.y, Ov.z));
+    
+    Vector Ov = (bv2 - bv1).normalize();
+    Vector Ou = (bv3 - bv2).normalize();
+    Vector OvN = cross(normal, Ov);
+    Vector OuN = cross(normal, Ou);
+
     Vector D = Vector(dx.x*OvN.x, dx.y*OvN.y, dx.z*OvN.z) - Vector(dy.x*OuN.x, dy.y*OuN.y, dy.z*OuN.z);
     Vector normalP = (base->normal + vscale*D);
     
