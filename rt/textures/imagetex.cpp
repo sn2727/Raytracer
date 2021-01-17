@@ -116,11 +116,18 @@ Point ImageTexture::format(Point p, int width, int height) {
 } 
 
 RGBColor ImageTexture::getColorDX(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    int w = image.width();
+    int h = image.height();
+    //return image(ceil(coord.x*w), round(coord.y*h)) - image(floor(coord.x*w), round(coord.y*h));
+    return getColor(Point((coord.x*w + 1)/w, coord.y, coord.z)) - getColor(coord);
 }
 
 RGBColor ImageTexture::getColorDY(const Point& coord) {
-    /* TODO */ NOT_IMPLEMENTED;
+    int w = image.width();
+    int h = image.height();
+    //return image(round(coord.x*w), ceil(coord.y*h)) - image(round(coord.x*w), floor(coord.y*h));
+    return getColor(Point(coord.x, (coord.y*h+1)/h, coord.z)) - getColor(coord);
+
 }
 
 }
