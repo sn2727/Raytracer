@@ -23,23 +23,13 @@ BBox BumpMapper::getBounds() const {
 Intersection BumpMapper::intersect(const Ray& ray, float previousBestDistance) const {
     Intersection intsec = base -> intersect(ray, previousBestDistance);
     if (!intsec) return Intersection::failure();
-    Point texPoint = intsec.local();
+    Point bary = intsec.local();
+    Point texPoint = bv1*bary.x + bv2*bary.y + bv3*bary.z;
     Vector normal = base->normal;
-    float u = texPoint.x;
-    float v = texPoint.y;
     Vector dx(bumpmap->getColorDX(texPoint).r, bumpmap->getColorDX(texPoint).g, bumpmap->getColorDX(texPoint).b);
     Vector dy(bumpmap->getColorDY(texPoint).r, bumpmap->getColorDY(texPoint).g, bumpmap->getColorDY(texPoint).b);
-    
-    Vector Ov = (bv2 - bv1).normalize();
-    Vector Ou = (bv3 - bv2).normalize();
-    Vector OvN = cross(normal, Ov);
-    Vector OuN = cross(normal, Ou);
-
-    Vector D = Vector(dx.x*OvN.x, dx.y*OvN.y, dx.z*OvN.z) - Vector(dy.x*OuN.x, dy.y*OuN.y, dy.z*OuN.z);
-    Vector normalP = (base->normal + vscale*D);
-    
+    Vector normalP = normal + vscale*dx + vscale*dy;
     return Intersection(intsec.distance, ray, intsec.solid, normalP, intsec.local());
-
 }
 
 void BumpMapper::setMaterial(Material* m) {
