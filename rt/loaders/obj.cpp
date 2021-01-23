@@ -1,5 +1,5 @@
 #define DISABLE_COORDMAPPERS
-#define DISABLE_SMOOTH_TRIANGLE
+//#define DISABLE_SMOOTH_TRIANGLE
 #define DISABLE_MATERIALS
 
 #include <core/assert.h>
@@ -254,7 +254,7 @@ Int3 FileLine::fetchVertex() {
 }
 
 
-void loadOBJ(Group* dest, const std::string& path, const std::string& filename, MatLib* inmats) {
+void loadOBJ(Group* dest, const std::string& path, const std::string& filename, Material* mat, MatLib* inmats) {
     MatLib* matlib;
     if (inmats)
         matlib = inmats;
@@ -268,7 +268,7 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
     std::vector<Float2> texcoord;
 
     std::set<Instruction> unsupportedEncounters;
-    Material* material = nullptr;
+    Material* material = mat;
 
     FileLine fileline;
     fileline.open(path + filename);

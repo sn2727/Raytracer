@@ -48,4 +48,9 @@ RGBColor RecursiveRayTracingIntegrator::getRecursiveRadiance(const Ray& ray) con
     return getRadiance(ray);
 }
 
+void RecursiveRayTracingIntegrator::setRecDepth(int d) {
+    this->REC_DEPTH = d;
+}
+
+
 }

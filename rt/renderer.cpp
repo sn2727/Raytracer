@@ -8,9 +8,7 @@
 #include <rt/integrators/casting.h>
 #include <rt/integrators/castingdist.h>
 #include <iostream>
-
-#pragma omp parallel
-#pragma omp for
+#include <omp.h>
 
 namespace rt {
 
@@ -19,8 +17,25 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
 {}
 
 void Renderer::render(Image& img) {
+    int pixels = img.height()*img.width();
+    int tenth = pixels/10;
+    int benchmarks[9] = {tenth,
+                        2*tenth,
+                        3*tenth,
+                        4*tenth,
+                        5*tenth,
+                        6*tenth,
+                        7*tenth,
+                        8*tenth,
+                        9*tenth};
+
+    int benchmark = benchmarks[0];
+    int benchmarkpointer = 0;
+
     if (samples <= 1) {
+        #pragma omp parallel for
         for (uint w = 0; w < img.width(); w++) {
+            #pragma omp parallel for
             for (uint h = 0; h < img.height(); h++){
                 // Normalized device coordinates [0, 1]
                 float ndcx = (w + 0.5f) / img.width();
@@ -31,10 +46,18 @@ void Renderer::render(Image& img) {
                 float sscy = -1*(ndcy * 2 - 1);
     
                 img(w,h) = integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
+
+                if (w*h > benchmark) {
+                    std::cout<<(benchmarkpointer+1)*10<<" % DONE \n";
+                    benchmarkpointer++;
+                    benchmark = benchmarks[benchmarkpointer];
+                }
             }         
         }
     } else {
+        #pragma omp parallel for
         for (uint w = 0; w < img.width(); w++) {
+            #pragma omp parallel for
             for (uint h = 0; h < img.height(); h++){
                 RGBColor radiance = RGBColor::rep(0);
                 for (uint s = 0; s < samples; s++) {
@@ -48,7 +71,13 @@ void Renderer::render(Image& img) {
                     float sscy = -1*(ndcy * 2 - 1);
                     radiance = radiance + integrator->getRadiance(cam->getPrimaryRay(sscx, sscy));
                 }
-                img(w,h) = radiance / samples;         
+                img(w,h) = radiance / samples;   
+
+                if (w*h > benchmark) {
+                    std::cout<<(benchmarkpointer+1)*10<<" % DONE \n";
+                    benchmarkpointer++;
+                    benchmark = benchmarks[benchmarkpointer];
+                }     
             }    
         }
     }

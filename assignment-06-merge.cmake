@@ -60,6 +60,8 @@ set(ASSIGNMENT_SOURCES
     main/a_mappers.cpp
     main/a_distributed.cpp
     main/a_smooth.cpp
+    main/playground.cpp
+    main/RC.cpp
 )
 
 file(COPY
