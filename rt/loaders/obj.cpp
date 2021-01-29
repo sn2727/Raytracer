@@ -10,6 +10,7 @@
 #include <string>
 #include <fstream>
 #include <set>
+#include <rt/coordmappers/coordmapper.h>
 
 #ifndef DISABLE_COORDMAPPERS
 #include <rt/coordmappers/world.h>
@@ -254,7 +255,7 @@ Int3 FileLine::fetchVertex() {
 }
 
 
-void loadOBJ(Group* dest, const std::string& path, const std::string& filename, Material* mat, MatLib* inmats) {
+void loadOBJ(Group* dest, const std::string& path, const std::string& filename, Material* mat, CoordMapper* texMapper,MatLib* inmats) {
     MatLib* matlib;
     if (inmats)
         matlib = inmats;
@@ -330,7 +331,7 @@ void loadOBJ(Group* dest, const std::string& path, const std::string& filename, 
                 READ_VERTEX(2, true)
 
                 do {
-                    CoordMapper* mapper = nullptr;
+                    CoordMapper* mapper = texMapper;
 #ifndef DISABLE_COORDMAPPERS
                     bool skiptex = v[0].tidx == 0 || v[1].tidx == 0 || v[2].tidx == 0;
                     if (skiptex) {

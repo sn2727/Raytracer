@@ -59,9 +59,8 @@ set(ASSIGNMENT_SOURCES
     main/a_local.cpp
     main/a_mappers.cpp
     main/a_distributed.cpp
-    main/a_smooth.cpp
-    main/playground.cpp
-    main/RC.cpp
+    main/a_smooth.cpp    
+    main/forest.cpp
 )
 
 file(COPY

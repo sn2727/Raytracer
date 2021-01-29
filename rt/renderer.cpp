@@ -16,6 +16,30 @@ Renderer::Renderer(Camera* cam, Integrator* integrator)
     : cam(cam), integrator(integrator), samples(1)
 {}
 
+void blur(int w, int h, RGBColor blur, Image& img) {
+    if (w >= 0 && h < img.height() && w >= 0 && w < img.width() && img(w, h).sum() < 0.1f) {
+        img(w, h) = blur;
+    }    
+}
+
+void Renderer::blurStars(Image& img) {
+    for (int w = 0; w < img.width(); w++) {
+        for (int h = 0; h < img.height(); h++) {
+            if (img(w,h).sum() > 2.99f) {
+                RGBColor pc(img(w,h));  
+                RGBColor blurC(1, 1, 0.478f);
+                int range = 3;
+                for (int i = 1; i <= range; i++) {
+                    blur(w-i, h, 3*(1/float(i))*blurC, img);
+                    blur(w, h-i, 3*(1/float(i))*blurC, img);
+                    blur(w+i, h, 3*(1/float(i))*blurC, img);
+                    blur(w, h+i, 3*(1/float(i))*blurC, img);
+                }
+            }
+        }
+    }
+}
+
 void Renderer::render(Image& img) {
     int pixels = img.height()*img.width();
     int tenth = pixels/10;

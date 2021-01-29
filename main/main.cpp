@@ -11,10 +11,9 @@ void a_mappers();
 void a_distributed();
 void a_smooth();
 void a_bumpmappers();
-void RC();
-void playground();
+void forest();
 
 int main(int argc, char* argv[]) {
-    RC();
+    forest();
     return 0;
 }

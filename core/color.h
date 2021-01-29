@@ -21,6 +21,7 @@ public:
     RGBColor operator + (const RGBColor& c) const;
     RGBColor operator - (const RGBColor& c) const;
     RGBColor operator * (const RGBColor& c) const;
+    float sum() const;
     
     bool operator == (const RGBColor& b) const;
     bool operator != (const RGBColor& b) const;

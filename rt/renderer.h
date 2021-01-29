@@ -17,6 +17,7 @@ public:
     void render(Image& img);
     void test_render1(Image& img);
     void test_render2(Image& img);
+    void blurStars(Image& img); 
 private:
     Camera* cam;
     Integrator* integrator;

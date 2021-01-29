@@ -14,6 +14,11 @@ RGBColor RGBColor::operator + (const RGBColor& c) const {
     return RGBColor(this -> r + c.r, this -> g + c.g, this -> b + c.b);
 }
 
+float RGBColor::sum() const{
+    return (this->r + this->b + this->b);
+}
+
+
 RGBColor RGBColor::operator - (const RGBColor& c) const {
     return RGBColor(this -> r - c.r, this -> g - c.g, this -> b - c.b);
 }
