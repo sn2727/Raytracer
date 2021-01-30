@@ -6,6 +6,7 @@
 #include <rt/cameras/perspective.h>
 #include <rt/cameras/dofperspective.h>
 #include <rt/textures/constant.h>
+#include <rt/textures/perlin.h>
 #include <rt/textures/imagetex.h>
 #include <rt/renderer.h>
 #include <rt/integrators/recraytrace.h>
@@ -26,12 +27,14 @@
 #include <ctime>
 #include <iostream>
 
+
+
 using namespace rt;
 
 /** OPTIONS **/
 
-int width = 1000;
-int height = 1000;
+int width = 400;
+int height = 400;
 bool toggleDOF = false;
 int samples = 1;
 int integratorRecDepth = 10;
@@ -40,29 +43,32 @@ RGBColor lightIntensity = RGBColor::rep(0.7f)*10;
 
 /** MATERIALS **/
 
+PerlinTexture* perlin = new PerlinTexture(RGBColor(0.545f,0.27f,0.0745f), RGBColor(0.6274f,0.3215f,0.1764f));
 Texture* blacktex = new ConstantTexture(RGBColor::rep(0.0f));
 Texture* whitetex = new ConstantTexture(RGBColor::rep(1.0f));
 Texture* greytex = new ConstantTexture(RGBColor::rep(0.5f));
 Texture* brown = new ConstantTexture(0.6f * RGBColor(0.545f, 0.27f, 0.074f)); 
 Texture* greentex = new ConstantTexture(RGBColor(0,0.4f,0)); 
 Texture* fog = new ImageTexture("models/fog.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
+Texture* deertex = new ImageTexture("models/deertex.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
+Texture* firtex = new ImageTexture("models/firtex.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
 Texture* moontex = new ImageTexture("models/moontex.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
+Texture* birdtex = new ImageTexture("models/birdtex.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
+Texture* treetex = new ImageTexture("models/greenblacktex.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
 Material* walls = new LambertianMaterial(blacktex, whitetex);
 Material* white = new LambertianMaterial(whitetex, whitetex);
 RGBColor warm = 3*RGBColor(0.3f, 0.18f, 0.04f);
 Texture* yellowtex = new ConstantTexture(warm);
 Material* lighter = new LambertianMaterial(yellowtex, whitetex);
-//Material* moon = new LambertianMaterial(new ConstantTexture(RGBColor(0.996f, 0.988f, 0.843f)), whitetex);
 Material* moon = new LambertianMaterial(new ConstantTexture(RGBColor(0.996f, 0.988f, 0.843f)), whitetex);
-//Material* moon = new LambertianMaterial(moontex, whitetex);
 Material* star = new LambertianMaterial(new ConstantTexture(RGBColor::rep(1)), whitetex);
 Material* weakstar = new LambertianMaterial(new ConstantTexture(RGBColor::rep(0.7f)), whitetex);
 
-Texture* groundTexture = new ImageTexture("models/ground.jpg", ImageTexture::REPEAT, ImageTexture::BILINEAR);
-Material* groundMaterial = new LambertianMaterial(blacktex, groundTexture);
-Material* deerMaterial = new LambertianMaterial(blacktex, brown);
-Material* woodMaterial = new LambertianMaterial(blacktex, greentex);
-Material* birdMaterial = new LambertianMaterial(blacktex, brown);
+Texture* groundTexture = new ImageTexture("models/ground6.jpg", ImageTexture::CLAMP, ImageTexture::NEAREST);
+Material* groundMaterial = new LambertianMaterial(blacktex, perlin);
+Material* deerMaterial = new LambertianMaterial(blacktex, deertex);
+Material* woodMaterial = new LambertianMaterial(blacktex, treetex);
+Material* birdMaterial = new LambertianMaterial(blacktex, birdtex);
 
 
 void buildScene(SimpleGroup* scene, World* world) {
@@ -72,19 +78,20 @@ void buildScene(SimpleGroup* scene, World* world) {
 
     //stars right to left
     scene->add(new Sphere(Point(0.77f, 0.62f, 1.f), 0.0012f, nullptr, star)); 
-    scene->add(new Sphere(Point(0.75f, 0.7f, 1.f), 0.0023f, nullptr, star)); 
+    scene->add(new Sphere(Point(0.75f, 0.7f, 1.f), 0.0013f, nullptr, star)); 
     scene->add(new Sphere(Point(0.73f, 0.56f, 1.f), 0.0012f, nullptr, star)); 
     scene->add(new Sphere(Point(0.69f, 0.71f, 1.f), 0.00145f, nullptr, star)); 
-    scene->add(new Sphere(Point(0.676f, 0.58f, 1.f), 0.0015f, nullptr, star)); 
-    scene->add(new Sphere(Point(0.67f, 0.65f, 1.f), 0.0015f, nullptr, star)); 
+    scene->add(new Sphere(Point(0.676f, 0.58f, 1.f), 0.0007f, nullptr, star)); 
+    scene->add(new Sphere(Point(0.67f, 0.65f, 1.f), 0.0008f, nullptr, star)); 
     scene->add(new Sphere(Point(0.67f, 0.73f, 1.f), 0.0011f, nullptr, star));
     scene->add(new Sphere(Point(0.656f, 0.51f, 1.f), 0.0015f, nullptr, star)); 
     scene->add(new Sphere(Point(0.64f, 0.71f, 1.f), 0.001f, nullptr, star));
+    scene->add(new Sphere(Point(0.63f, 0.657f, 1.f), 0.0004f, nullptr, weakstar));
     scene->add(new Sphere(Point(0.627f, 0.68f, 1.f), 0.0013f, nullptr, star));
     scene->add(new Sphere(Point(0.62f, 0.73f, 1.f), 0.0018f, nullptr, star));
-    scene->add(new Sphere(Point(0.58f, 0.6f, 1.f), 0.00199f, nullptr, star));
-    scene->add(new Sphere(Point(0.577f, 0.675f, 1.f), 0.00165f, nullptr, star)); 
-    scene->add(new Sphere(Point(0.56f, 0.62f, 1.f), 0.0016f, nullptr, star));
+    scene->add(new Sphere(Point(0.58f, 0.6f, 1.f), 0.00099f, nullptr, star));
+    scene->add(new Sphere(Point(0.577f, 0.675f, 1.f), 0.00115f, nullptr, star)); 
+    scene->add(new Sphere(Point(0.56f, 0.62f, 1.f), 0.0012f, nullptr, star));
     scene->add(new Sphere(Point(0.54f, 0.57f, 1.f), 0.0017f, nullptr, star)); 
     scene->add(new Sphere(Point(0.523f, 0.692f, 1.f), 0.00178f, nullptr, star));
     scene->add(new Sphere(Point(0.5f, 0.65f, 1.f), 0.001f, nullptr, weakstar));
@@ -135,28 +142,22 @@ void buildScene(SimpleGroup* scene, World* world) {
     scene->add(new Sphere(Point(-0.272f, 0.669f, 1.f), 0.00166f, nullptr, star));
     scene->add(new Sphere(Point(-0.61f, 0.56f, 1.f), 0.0014f, nullptr, star));
 
+    perlin->addOctave(1.0f, 3.0f);
     //bird's eye
-    scene->add(new Sphere(Point(0.373f, 0.31f, 0.18f), 0.001f, nullptr, new LambertianMaterial(yellowtex, whitetex)));
+    scene->add(new Sphere(Point(0.373f, 0.31f, 0.18f), 0.0008f, nullptr, new LambertianMaterial(yellowtex, whitetex)));
     
     //deer's eye
-    scene->add(new Sphere(Point(0.217f, 0.118f, 0), 0.0025f, nullptr, new GlassMaterial(1.5f)));
+    scene->add(new Sphere(Point(0.217f, 0.118f, 0), 0.0015f, nullptr, new GlassMaterial(2.5f)));
     
     //lights
-    //world->light.push_back(new SpotLight(cameraPosition, Vector(0,0.05f,1).normalize(), pi/12, 0.0001f, lightIntensity));
-    //world->light.push_back(new PointLight(Point(0.3f,0.5f, 0), RGBColor::rep(2)));
-    Point birdLP(0.28f, 0.15f, -0.4f);
-    world->light.push_back(new PointLight(birdLP, RGBColor::rep(0.3f))); // bird
-    world->light.push_back(new PointLight(Point(0.38f, 0.315f, 0.2f), RGBColor::rep(0.0005f))); // bird 2
+    Point birdLP(0.28f, 0.25f, -0.2f);
+    world->light.push_back(new PointLight(birdLP, RGBColor::rep(0.25f))); // bird
     
-    world->light.push_back(new PointLight(Point(0.22f, 0.115f, -0.01f), RGBColor::rep(0.004f))); // deer 
-    world->light.push_back(new PointLight(Point(0.22f, 0.115f, 0), RGBColor::rep(0.0001f))); // deer2 
-    //scene->add(new Sphere(Point(0.18f, 0.115f, 0), 0.05f, nullptr, moon)); // deer 
+    world->light.push_back(new PointLight(Point(0.22f, 0.115f, 0), RGBColor::rep(0.000005f))); // deer2 
 
-   // scene->add(new Sphere(Point(0.38f, 0.3f, 0.2f), 0.01f, nullptr, moon));
     world->light.push_back(new PointLight(Point(0.3f, 0.59f, 0.9f), RGBColor::rep(0.02f))); //moon
-    //scene->add(new Sphere(birdLP, 0.01f, nullptr, moon));
-    //world->light.push_back(new PointLight(Point(0.5f,0.4f, 0), RGBColor::rep(2))); // bird
-    //world->light.push_back(new DirectionalLight(Vector(0,0,1), RGBColor::rep(10)));
+    
+
 }
 
 void forest() {
@@ -178,17 +179,17 @@ void forest() {
     engine.setSamples(samples);
     
     buildScene(scene, world);
-    loadOBJ(scene, "../../models/", "ground.obj", groundMaterial, new WorldMapper(Vector::rep(200)));
+    loadOBJ(scene, "../../models/", "ground.obj", groundMaterial, new WorldMapper(Vector::rep(1)));
     loadOBJ(scene, "../../models/", "woods3.obj", woodMaterial);
-    loadOBJ(scene, "../../models/", "fDeer.obj", deerMaterial);
-    loadOBJ(scene, "../../models/", "fBird3.obj", birdMaterial, new WorldMapper(Vector::rep(100)));
+    loadOBJ(scene, "../../models/", "fDeer.obj", deerMaterial, new WorldMapper(Vector::rep(10)));
+    loadOBJ(scene, "../../models/", "fBird3.obj", birdMaterial, new WorldMapper(Vector::rep(30)));
 
     auto start = std::chrono::system_clock::now();
     std::cout<<"STARTED \n";
 
     engine.render(img);
     std::cout<<"Post Processing...\n";
-   // engine.blurStars(img);
+    engine.blurStars(img);
     img.writePNG("forest.png");
     
     auto end = std::chrono::system_clock::now();
@@ -196,7 +197,7 @@ void forest() {
     double seconds = elapsed_seconds2.count();
     if (seconds > 200) {
         std::cout<<"DONE \n"<<"time: "<<seconds/60<<" minutes \n";
-    }
+    } else
     std::cout<<"DONE \n"<<"time: "<<seconds<<" seconds \n";
 }
 

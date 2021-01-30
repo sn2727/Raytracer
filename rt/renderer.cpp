@@ -23,8 +23,9 @@ void blur(int w, int h, RGBColor blur, Image& img) {
 }
 
 void Renderer::blurStars(Image& img) {
+    if (img.width()*img.height() < 1000000) return;
     for (int w = 0; w < img.width(); w++) {
-        for (int h = 0; h < img.height(); h++) {
+        for (int h = 0; h < img.height()/3; h++) {
             if (img(w,h).sum() > 2.99f) {
                 RGBColor pc(img(w,h));  
                 RGBColor blurC(1, 1, 0.478f);
