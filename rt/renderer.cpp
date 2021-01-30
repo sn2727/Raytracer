@@ -31,10 +31,10 @@ void Renderer::blurStars(Image& img) {
                 RGBColor blurC(1, 1, 0.478f);
                 int range = 3;
                 for (int i = 1; i <= range; i++) {
-                    blur(w-i, h, 3*(1/float(i))*blurC, img);
-                    blur(w, h-i, 3*(1/float(i))*blurC, img);
-                    blur(w+i, h, 3*(1/float(i))*blurC, img);
-                    blur(w, h+i, 3*(1/float(i))*blurC, img);
+                    blur(w-i, h, (1/float(i))*blurC, img);
+                    blur(w, h-i, (1/float(i))*blurC, img);
+                    blur(w+i, h, (1/float(i))*blurC, img);
+                    blur(w, h+i, (1/float(i))*blurC, img);
                 }
             }
         }
