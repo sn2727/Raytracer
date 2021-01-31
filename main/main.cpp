@@ -16,7 +16,7 @@ void a_bumpmappers();
 void forest(int w, int h, std::string file);
 
 int main(int argc, char* argv[]) {
-    forest(400, 400, "thumbnail.png");
+    //forest(400, 400, "thumbnail.png");
     forest(1600, 1600, "final.png"); 
     return 0;
 }
