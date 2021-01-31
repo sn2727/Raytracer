@@ -22,6 +22,8 @@ file(COPY
     models/fDeer.obj
     models/fWoods.mtl
     models/fWoods.obj
+    models/fWoods2.obj
+    models/fWoods2.mtl
     models/greenblacktex.png
     models/ground.mtl
     models/ground.obj

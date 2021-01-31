@@ -180,7 +180,7 @@ void forest(int w, int h, std::string file) {
     
     buildScene(scene, world);
     loadOBJ(scene, "models/", "ground.obj", groundMaterial);
-    loadOBJ(scene, "models/", "fWoods.obj", woodMaterial, new WorldMapper(Vector::rep(11)));
+    loadOBJ(scene, "models/", "fWoods2.obj", woodMaterial, new WorldMapper(Vector::rep(11)));
     loadOBJ(scene, "models/", "fDeer.obj", deerMaterial, new WorldMapper(Vector::rep(10)));
     loadOBJ(scene, "models/", "fBird.obj", birdMaterial, new WorldMapper(Vector::rep(30)));
 
